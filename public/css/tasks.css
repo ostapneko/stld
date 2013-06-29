@@ -1,0 +1,15 @@
+tr.edit-task td.big-cell {
+  width: 450px;
+}
+
+tr.edit-task td.medium-cell {
+  width: 300px;
+}
+
+tr.edit-task td.little-cell {
+  width: 150px;
+}
+
+button.add-task {
+  margin-bottom: 15px;
+}

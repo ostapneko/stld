@@ -1,1 +1,28 @@
-tasks page
+<% content_for :body do %>
+  <link href="css/tasks.css" rel="stylesheet">
+<% end %>
+
+<% content_for :body do %>
+  <div class="container">
+    <h1>Tasks</h1>
+    <h2>Recurring</h2>
+    <button class="btn add-task"><i class="icon-plus"></i> Add task</button>
+    <table class="table">
+      <% 5.times do |n| %>
+        <%= erb :edit_recurring_task, locals: {
+          active: n % 3 == 0,
+          name: "recurring task #{n + 1}"
+        } %>
+      <% end %>
+    </table>
+  <h2>Unique</h2>
+  <button class="btn add-task"><i class="icon-plus"></i> Add task</button>
+  <table class="table">
+    <% 5.times do |n| %>
+      <%= erb :edit_unique_task, locals: {
+        name: "unique task #{n + 1}"
+      } %>
+    <% end %>
+  </table>
+  </div>
+<% end %>
