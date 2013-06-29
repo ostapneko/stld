@@ -1,4 +1,5 @@
 GEM
+  remote: https://rubygems.org/
   specs:
     backports (3.3.2)
     eventmachine (1.0.3)
@@ -19,6 +20,7 @@ GEM
       ffi (>= 0.5.0)
     rerun (0.8.1)
       listen (>= 1.0.3)
+    sequel (3.48.0)
     sinatra (1.4.3)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -37,5 +39,6 @@ PLATFORMS
 
 DEPENDENCIES
   rerun
+  sequel
   sinatra
   sinatra-contrib
