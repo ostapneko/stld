@@ -6,7 +6,7 @@
         <h2>Recurring</h2>
         <table class="table">
           <% 5.times do |n| %>
-            <%= erb :recurring_task, locals: {
+            <%= erb :switch_recurring_task, locals: {
               done: n % 3 == 0,
               name: "recurring task #{n + 1}",
               frequency: n % 3 + 1
@@ -18,7 +18,7 @@
         <h2>Unique task</h2>
         <table class="table">
           <% 5.times do |n| %>
-            <%= erb :unique_task, locals: {
+            <%= erb :switch_unique_task, locals: {
               done: n % 3 == 0,
               name: "unique task #{n + 1}"
             } %>
