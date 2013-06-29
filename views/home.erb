@@ -1,1 +1,31 @@
-home page
+<% content_for :body do %>
+  <div class="container">
+    <h1>This week</h1>
+    <div class="row">
+      <div class="span6">
+        <h2>Recurring</h2>
+        <table class="table">
+          <% 5.times do |n| %>
+            <%= erb :recurring_task, locals: {
+              done: n % 3 == 0,
+              name: "recurring task #{n + 1}",
+              frequency: n % 3 + 1
+            } %>
+          <% end %>
+        </table>
+      </div>
+      <div class="span6">
+        <h2>Unique task</h2>
+        <table class="table">
+          <% 5.times do |n| %>
+            <%= erb :unique_task, locals: {
+              done: n % 3 == 0,
+              name: "unique task #{n + 1}"
+            } %>
+          <% end %>
+          </table>
+        </div>
+      </div>
+      <button class="btn"><i class="icon-plus"></i> Add task</button>
+    </div>
+  <% end %>
