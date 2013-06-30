@@ -1,16 +1,18 @@
-<tr>
-  <td>
-    <%= name %>
+<tr class="edit-task">
+  <td class="task-description big-cell">
+    <%= task.description %>
   </td>
-  <td>
-    <% if done %><i class="icon-ok"></i><% end %>
+  <td class="big-cell"> Repeats every <%= task.frequency == 1 ? "week" : "#{task.frequency} weeks" %></td>
+  <td class="little-cell">
+    <button class="btn"><i class="icon-edit"></i> Edit</button>
   </td>
-  <td>
+  <td class="big-cell">
     <div class="btn-group" data-toggle="buttons-radio">
-      <button type="button" class="btn<%= ' active' unless done %>">Not Done</button>
-      <button type="button" class="btn btn-success <%= ' active' if done %>">Done</button>
+      <button type="button" class="btn<%= ' active' if task.enabled %>"><i class="icon-plus"></i> Enabled</button>
+      <button type="button" class="btn<%= ' active' unless task.enabled %>">Disabled <i class="icon-minus"></i></button>
+    </div>
   </td>
-  <td>
-    Every <%= frequency %> week(s)
+  <td class="little-cell">
+    <button class="btn btn-danger"><i class="icon-remove icon-white"></i> Delete</button>
   </td>
-</div>
+</tr>

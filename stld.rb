@@ -6,7 +6,7 @@ require_relative 'models/unique_task'
 require_relative 'services/task_service'
 
 get '/' do
-  erb :home
+  erb :"home/index"
 end
 
 get '/tasks' do
