@@ -15,7 +15,7 @@ class TaskService
     if task.valid?
       save_task(task)
     else
-      return [task.errors, nil]
+      return [task.errors.full_messages, nil]
     end
   end
 
@@ -46,16 +46,16 @@ class TaskService
 
   def delete_task(task)
     task.delete
-    [{}, TASK_DELETED_MSG]
+    [[], TASK_DELETED_MSG]
   end
 
   def fail_task_not_found
-    errors = OpenStruct.new(full_messages: [TASK_NOT_FOUND_ERR])
+    errors = [TASK_NOT_FOUND_ERR]
     [errors, nil]
   end
 
   def save_task(task)
     task.save
-    [{}, TASK_CREATED_MSG]
+    [[], TASK_CREATED_MSG]
   end
 end

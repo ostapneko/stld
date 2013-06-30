@@ -1,17 +1,17 @@
-<% if @errors && @errors.any? %>
+<% if flash[:errors] && flash[:errors].any? %>
   <div class="alert alert-error">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     Some errors prevented the task creation:
     <ul>
-      <% @errors.full_messages.each do |err| %>
+      <% flash[:errors].each do |err| %>
         <li><%= err %></li>
       <% end %>
     </ul>
   </div>
 <% end %>
-<% if @msg %>
+<% if flash[:notice] %>
   <div class="alert alert-success">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <%= @msg %>
+    <%= flash[:notice] %>
   </div>
 <% end %>
