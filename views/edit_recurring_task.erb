@@ -1,14 +1,14 @@
 <tr class="edit-task">
-  <td class="task-name">
-    <%= name %>
+  <td class="task-description">
+    <%= task.description %>
   </td>
   <td class="little-cell">
     <button class="btn"><i class="icon-edit"></i> Edit</button>
   </td>
   <td class="medium-cell">
     <div class="btn-group" data-toggle="buttons-radio">
-      <button type="button" class="btn<%= ' active' if active %>"><i class="icon-plus"></i> Active</button>
-      <button type="button" class="btn<%= ' active' unless active %>">Inactive <i class="icon-minus"></i></button>
+      <button type="button" class="btn<%= ' active' if task.enabled %>"><i class="icon-plus"></i> Enabled</button>
+      <button type="button" class="btn<%= ' active' unless task.enabled %>">Disabled <i class="icon-minus"></i></button>
     </div>
   </td>
   <td class="little-cell">
