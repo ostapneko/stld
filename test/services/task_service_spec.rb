@@ -27,7 +27,7 @@ describe TaskService do
         DB[:recurring_tasks].count.must_equal 1
       end
 
-      it "returns an empty errors hash" do
+      it "returns no errors" do
         @errors.must_be_empty
       end
 
@@ -46,8 +46,53 @@ describe TaskService do
         DB[:recurring_tasks].count.must_equal 0
       end
 
-      it "returns a non-empty error hash" do
+      it "returns errors" do
         @errors.wont_be_empty
+      end
+
+      it "returns a nil success message" do
+        @msg.must_be_nil
+      end
+    end
+  end
+
+  describe '#try_delete_task' do
+    before do
+      DB[:unique_tasks].delete
+    end
+
+    describe "when the task exists" do
+      before do
+        UniqueTask.create({
+          description: "desc",
+          status:      "todo"
+        })
+
+        id = UniqueTask.first.id
+
+        @errors, @msg = @service.try_delete_task(id, UniqueTask)
+      end
+
+      it "deletes the record" do
+        DB[:unique_tasks].count.must_equal 0
+      end
+
+      it "returns no errors object" do
+        @errors.must_be_empty
+      end
+
+      it "returns a success message" do
+        @msg.must_equal "Task deleted!"
+      end
+    end
+
+    describe "when the task does not exist" do
+      before do
+        @errors, @msg = @service.try_delete_task(1, UniqueTask)
+      end
+
+      it "returns an error with a 'task not found' full_messages'" do
+        @errors.must_equal ['The task to delete could not be found']
       end
 
       it "returns a nil success message" do

@@ -9,6 +9,9 @@
     <button class="btn"><i class="icon-edit"></i> Affect to sprint</button>
   </td>
   <td class="little-cell">
-    <button class="btn btn-danger"><i class="icon-remove icon-white"></i> Delete</button>
+    <form action="/unique_task/<%= task.id %>", method="post">
+      <button class="btn btn-danger"><i class="icon-remove icon-white"></i> Delete</button>
+      <input name="_method" type="hidden" value="delete" />
+    </form>
   </td>
 </tr>
