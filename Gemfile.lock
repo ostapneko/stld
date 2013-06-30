@@ -11,6 +11,8 @@ GEM
     minitest (4.3.2)
     pg (0.15.1)
     rack (1.5.2)
+    rack-flash3 (1.0.3)
+      rack
     rack-protection (1.5.0)
       rack
     rack-test (0.6.2)
@@ -42,6 +44,7 @@ PLATFORMS
 DEPENDENCIES
   minitest
   pg
+  rack-flash3
   rerun
   sequel
   sinatra
