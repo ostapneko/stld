@@ -14,4 +14,8 @@ class RecurringTask < Sequel::Model
   def self.enabled
     where(enabled: true)
   end
+
+  def self.active
+    enabled.where(status: ["todo", "done"])
+  end
 end

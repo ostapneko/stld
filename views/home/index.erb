@@ -5,11 +5,10 @@
       <div class="span6">
         <h2>Recurring</h2>
         <table class="table">
-          <% 5.times do |n| %>
-            <%= erb :"home/show_recurring_task", locals: {
-              done: n % 3 == 0,
-              name: "recurring task #{n + 1}",
-              frequency: n % 3 + 1
+          <% RecurringTask.active.each do |task| %>
+            <%= erb :"home/show_task", locals: {
+              type: :recurring,
+              task: task
             } %>
           <% end %>
         </table>
@@ -17,10 +16,10 @@
       <div class="span6">
         <h2>Unique task</h2>
         <table class="table">
-          <% 5.times do |n| %>
-            <%= erb :"home/show_unique_task", locals: {
-              done: n % 3 == 0,
-              name: "unique task #{n + 1}"
+          <% UniqueTask.active.each do |task| %>
+            <%= erb :"home/show_task", locals: {
+              type: :unique,
+              task: task
             } %>
           <% end %>
           </table>
