@@ -1,5 +1,5 @@
 tr.edit-task td.big-cell {
-  width: 450px;
+  width: 250px;
 }
 
 tr.edit-task td.medium-cell {
@@ -7,9 +7,26 @@ tr.edit-task td.medium-cell {
 }
 
 tr.edit-task td.little-cell {
-  width: 150px;
+  width: 100px;
 }
 
-button.add-task {
+button#display-recurring-task-form,
+button#hide-recurring-task-form {
   margin-bottom: 15px;
+}
+
+button#hide-recurring-task-form {
+  display: none;
+}
+
+form#create-recurring-task-form {
+  display: none;
+}
+
+form#create-recurring-task-form input[name="description"] {
+  width: 400px;
+}
+
+form#create-recurring-task-form select[name="frequency"] {
+  width: 200px;
 }

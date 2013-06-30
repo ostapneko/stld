@@ -1,3 +1,10 @@
 require 'sequel'
 
-DB = Sequel.connect('path/to/db')
+db_name = case ENV['RACK_ENV']
+          when "test"; "stld_test"
+          when "development"; "stld"
+          end
+
+
+
+DB = Sequel.connect('postgres://stld:stld@localhost:5432/' + db_name)

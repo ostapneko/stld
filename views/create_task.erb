@@ -1,0 +1,14 @@
+<button class="btn" id="display-recurring-task-form"><i class="icon-plus"></i> Create task</button>
+<button class="btn" id="hide-recurring-task-form"><i class="icon-minus"></i> Cancel</button>
+<form action="recurring_task" method="post" class="form-inline" id="create-recurring-task-form">
+  <input name="description" type="text" class="input-small" placeholder="Description">
+  <select name="frequency" id="frequency">
+    <% [1,2,3,4].each do |f| %>
+      <option value="<%= f %>">Repeat every <%= f == 1 ? "week" : "#{f} weeks" %></option>
+    <% end %>
+  </select>
+  <label class="checkbox">
+    <input type="checkbox" name="enabled" checked> Enable
+  </label>
+  <button type="submit" class="btn btn-success">OK</button>
+</form>

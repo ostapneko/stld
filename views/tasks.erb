@@ -1,21 +1,22 @@
-<% content_for :body do %>
+<% content_for :css do %>
   <link href="css/tasks.css" rel="stylesheet">
 <% end %>
 
 <% content_for :body do %>
   <div class="container">
+    <%= @errors %>
     <h1>Tasks</h1>
     <h2>Recurring</h2>
-    <button class="btn add-task"><i class="icon-plus"></i> Add task</button>
+    <%= erb :create_task %>
     <table class="table">
-      <% RecurringTask.enabled.each do |task| %>
+      <% RecurringTask.all.each do |task| %>
         <%= erb :edit_recurring_task, locals: {
           task: task
         } %>
       <% end %>
     </table>
   <h2>Unique</h2>
-  <button class="btn add-task"><i class="icon-plus"></i> Add task</button>
+  <button class="btn create-task"><i class="icon-plus"></i> Create task</button>
   <table class="table">
     <% UniqueTask.all.each do |t| %>
       <%= erb :edit_unique_task, locals: {
@@ -24,4 +25,8 @@
     <% end %>
   </table>
   </div>
+<% end %>
+
+<% content_for :scripts do %>
+  <script src="js/tasks.js"></script>
 <% end %>
