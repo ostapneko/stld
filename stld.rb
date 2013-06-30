@@ -10,11 +10,11 @@ get '/' do
 end
 
 get '/tasks' do
-  erb :tasks
+  erb :"tasks/index"
 end
 
 post '/recurring_task' do
   service = TaskService.new
-  @errors = service.try_create_recurring_task(params)
-  erb :tasks
+  @errors, @msg = service.try_create_recurring_task(params)
+  erb :"tasks/index"
 end

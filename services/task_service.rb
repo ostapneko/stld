@@ -2,12 +2,14 @@ require_relative '../config/connection'
 require_relative '../models/recurring_task'
 
 class TaskService
+  TASK_CREATED_MSG = "Task created!"
+
   def try_create_recurring_task(params)
     creation_params = makeCreationParams(params)
     task = RecurringTask.new(creation_params)
-    return task.errors unless task.valid?
+    return [task.errors, nil] unless task.valid?
     task.save
-    return {}
+    return [{}, TASK_CREATED_MSG]
   end
 
   private

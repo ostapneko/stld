@@ -4,13 +4,13 @@
 
 <% content_for :body do %>
   <div class="container">
-    <%= @errors %>
+    <%= erb :"tasks/notifications" %>
     <h1>Tasks</h1>
     <h2>Recurring</h2>
-    <%= erb :create_task %>
+    <%= erb :"tasks/form" %>
     <table class="table">
       <% RecurringTask.all.each do |task| %>
-        <%= erb :edit_recurring_task, locals: {
+        <%= erb :"tasks/edit_recurring", locals: {
           task: task
         } %>
       <% end %>
@@ -19,7 +19,7 @@
   <button class="btn create-task"><i class="icon-plus"></i> Create task</button>
   <table class="table">
     <% UniqueTask.all.each do |t| %>
-      <%= erb :edit_unique_task, locals: {
+      <%= erb :"tasks/edit_unique", locals: {
         task: task
       } %>
     <% end %>
