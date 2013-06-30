@@ -10,7 +10,7 @@
     <%= erb :"tasks/form" %>
     <table class="table">
       <% RecurringTask.all.each do |task| %>
-        <%= erb :"tasks/edit_recurring", locals: {
+        <%= erb :"tasks/show_recurring", locals: {
           task: task
         } %>
       <% end %>
@@ -19,7 +19,7 @@
   <button class="btn create-task"><i class="icon-plus"></i> Create task</button>
   <table class="table">
     <% UniqueTask.all.each do |t| %>
-      <%= erb :"tasks/edit_unique", locals: {
+      <%= erb :"tasks/show_unique", locals: {
         task: task
       } %>
     <% end %>
