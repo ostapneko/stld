@@ -8,19 +8,18 @@
     <h2>Recurring</h2>
     <button class="btn add-task"><i class="icon-plus"></i> Add task</button>
     <table class="table">
-      <% 5.times do |n| %>
+      <% RecurringTask.enabled.each do |task| %>
         <%= erb :edit_recurring_task, locals: {
-          active: n % 3 == 0,
-          name: "recurring task #{n + 1}"
+          task: task
         } %>
       <% end %>
     </table>
   <h2>Unique</h2>
   <button class="btn add-task"><i class="icon-plus"></i> Add task</button>
   <table class="table">
-    <% 5.times do |n| %>
+    <% UniqueTask.all.each do |t| %>
       <%= erb :edit_unique_task, locals: {
-        name: "unique task #{n + 1}"
+        task: task
       } %>
     <% end %>
   </table>
