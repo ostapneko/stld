@@ -1,0 +1,21 @@
+<% is_done = task.status == "done" %>
+<tr>
+  <td>
+    <%= task.description %>
+  </td>
+  <td>
+    <% if is_done %><i class="icon-ok"></i><% end %>
+  </td>
+  <td>
+    <div class="btn-group" data-toggle="buttons-radio">
+      <button type="button" class="btn<%= ' active' unless is_done %>">Not Done</button>
+      <button type="button" class="btn btn-success <%= ' active' if is_done %>">Done</button>
+  </td>
+  <td>
+    <% if type == :recurring %>
+      Every <%= task.frequency %> week(s)
+    <% else %>
+      <button class="btn">Postpone</button>
+    <% end %>
+  </td>
+</div>

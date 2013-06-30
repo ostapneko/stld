@@ -7,7 +7,7 @@
     <%= erb :"tasks/notifications" %>
     <h1>Tasks</h1>
     <h2>Recurring</h2>
-    <%= erb :"tasks/form" %>
+    <%= erb :"tasks/form_for_recurring" %>
     <table class="table">
       <% RecurringTask.all.each do |task| %>
         <%= erb :"tasks/show_recurring", locals: {
@@ -18,7 +18,7 @@
   <h2>Unique</h2>
   <button class="btn create-task"><i class="icon-plus"></i> Create task</button>
   <table class="table">
-    <% UniqueTask.all.each do |t| %>
+    <% UniqueTask.all.each do |task| %>
       <%= erb :"tasks/show_unique", locals: {
         task: task
       } %>
