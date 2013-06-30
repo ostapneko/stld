@@ -5,7 +5,7 @@ class TaskService
   TASK_CREATED_MSG = "Task created!"
 
   def try_create_recurring_task(params)
-    creation_params = makeCreationParams(params)
+    creation_params = make_creation_params(params)
     task = RecurringTask.new(creation_params)
     return [task.errors, nil] unless task.valid?
     task.save
@@ -14,7 +14,7 @@ class TaskService
 
   private
 
-  def makeCreationParams(params)
+  def make_creation_params(params)
     {
       description: params["description"].to_s,
       frequency:   params["frequency"] && params["frequency"].to_i,

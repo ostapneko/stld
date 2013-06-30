@@ -1,15 +1,15 @@
-<% isDone = task.status == "done" %>
+<% is_done = task.status == "done" %>
 <tr>
   <td>
     <%= task.description %>
   </td>
   <td>
-    <% if isDone %><i class="icon-ok"></i><% end %>
+    <% if is_done %><i class="icon-ok"></i><% end %>
   </td>
   <td>
     <div class="btn-group" data-toggle="buttons-radio">
-      <button type="button" class="btn<%= ' active' unless isDone %>">Not Done</button>
-      <button type="button" class="btn btn-success <%= ' active' if isDone %>">Done</button>
+      <button type="button" class="btn<%= ' active' unless is_done %>">Not Done</button>
+      <button type="button" class="btn btn-success <%= ' active' if is_done %>">Done</button>
   </td>
   <td>
     <% if type == :recurring %>
