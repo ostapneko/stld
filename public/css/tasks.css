@@ -1,38 +1,21 @@
-tr.edit-task td.big-cell {
-  width: 250px;
-}
-
-tr.edit-task td.medium-cell {
-  width: 300px;
-}
-
-tr.edit-task td.little-cell {
-  width: 100px;
-}
-
-button#display-recurring-task-form,
-button#hide-recurring-task-form,
-button#display-unique-task-form,
-button#hide-unique-task-form
+button.show-task-form,
+button.hide-task-form
 {
   margin-bottom: 15px;
 }
 
-button#hide-unique-task-form,
-button#hide-recurring-task-form {
+button.hide-task-form {
   display: none;
 }
 
-form#create-unique-task-form,
-form#create-recurring-task-form {
+form.task-form {
   display: none;
 }
 
-form#create-unique-task-form input[name="description"],
-form#create-recurring-task-form input[name="description"] {
+form.task-form input[name="description"] {
   width: 400px;
 }
 
-form#create-recurring-task-form select[name="frequency"] {
+form.task-form select[name="frequency"] {
   width: 200px;
 }

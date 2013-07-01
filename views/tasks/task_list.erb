@@ -1,0 +1,12 @@
+<button class="btn show-task-form" id="show-<%= task_type %>-task-form-creation"><i class="icon-plus"></i> Create task</button>
+<button class="btn hide-task-form" id="hide-<%= task_type %>-task-form-creation"><i class="icon-minus"></i> Cancel</button>
+<%= erb :"tasks/form_for_#{task_type}", locals: {
+  id: "creation"
+} %>
+<div>
+  <% task_class.all.each do |task| %>
+    <%= erb :"tasks/show_#{task_type}", locals: {
+      task: task
+    } %>
+  <% end %>
+</div>

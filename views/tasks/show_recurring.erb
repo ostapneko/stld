@@ -1,21 +1,25 @@
-<tr class="edit-task">
-  <td class="task-description big-cell">
+<div class="row">
+  <div class="span3">
     <%= task.description %>
-  </td>
-  <td class="big-cell"> Repeats every <%= task.frequency == 1 ? "week" : "#{task.frequency} weeks" %></td>
-  <td class="little-cell">
-    <button class="btn"><i class="icon-edit"></i> Edit</button>
-  </td>
-  <td class="big-cell">
+  </div>
+  <div class="span2"> Repeats every <%= task.frequency == 1 ? "week" : "#{task.frequency} weeks" %></div>
+  <div class="span2">
+    <button class="btn show-task-form" id="show-recurring-task-form-<%= task.id %>"><i class="icon-edit"></i> Edit</button>
+    <button class="btn hide-task-form" id="hide-recurring-task-form-<%= task.id %>"><i class="icon-ban-circle"></i> Cancel</button>
+  </div>
+  <div class="span3">
     <div class="btn-group" data-toggle="buttons-radio">
       <button type="button" class="btn<%= ' active' if task.enabled %>"><i class="icon-plus"></i> Enabled</button>
       <button type="button" class="btn<%= ' active' unless task.enabled %>">Disabled <i class="icon-minus"></i></button>
     </div>
-  </td>
-  <td class="little-cell">
+  </div>
+  <div class="span2">
     <form action="/recurring_task/<%= task.id %>", method="post">
       <button class="btn btn-danger"><i class="icon-remove icon-white"></i> Delete</button>
       <input name="_method" type="hidden" value="delete" />
     </form>
-  </td>
-</tr>
+  </div>
+</div>
+<%= erb :"tasks/form_for_recurring", locals: {
+  id: task.id.to_s
+} %>

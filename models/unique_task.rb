@@ -2,6 +2,7 @@ require_relative '../config/connection.rb'
 
 class UniqueTask < Sequel::Model
   plugin :validation_helpers
+  self.raise_on_typecast_failure = false
 
   def validate
     super

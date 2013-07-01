@@ -10,16 +10,23 @@ enable :sessions
 use Rack::Flash
 
 helpers do
-  def delete_task(task_class)
+  def create_task(task_class)
     service = TaskService.new(task_class)
-    id = params[:id].to_i
-    flash[:errors], flash[:notice] = service.try_delete_task(params[:id])
+    flash[:errors], flash[:notice] = service.try_create(params)
     redirect to('/tasks')
   end
 
-  def create_task(task_class)
+  def delete_task(task_class)
     service = TaskService.new(task_class)
-    flash[:errors], flash[:notice] = service.try_create_task(params)
+    id = params[:id].to_i
+    flash[:errors], flash[:notice] = service.try_delete(id)
+    redirect to('/tasks')
+  end
+
+  def update_task(task_class)
+    service = TaskService.new(task_class)
+    id = params[:id].to_i
+    flash[:errors], flash[:notice] = service.try_update(id, params)
     redirect to('/tasks')
   end
 end
@@ -46,4 +53,12 @@ end
 
 delete '/unique_task/:id' do
   delete_task(UniqueTask)
+end
+
+put '/recurring_task/:id' do
+  update_task(RecurringTask)
+end
+
+put '/unique_task/:id' do
+  update_task(UniqueTask)
 end

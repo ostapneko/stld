@@ -7,24 +7,15 @@
     <%= erb :"tasks/notifications" %>
     <h1>Tasks</h1>
     <h2>Recurring</h2>
-    <%= erb :"tasks/form_for_recurring" %>
-    <table class="table">
-      <% RecurringTask.all.each do |task| %>
-        <%= erb :"tasks/show_recurring", locals: {
-          task: task
-        } %>
-      <% end %>
-    </table>
-  <h2>Unique</h2>
-  <%= erb :"tasks/form_for_unique" %>
-  <table class="table">
-    <% UniqueTask.all.each do |task| %>
-      <%= erb :"tasks/show_unique", locals: {
-        task: task
-      } %>
-    <% end %>
-  </table>
-  </div>
+    <%= erb :"tasks/task_list", locals: {
+      task_type: 'recurring',
+      task_class: RecurringTask
+    } %>
+    <h2>Unique</h2>
+    <%= erb :"tasks/task_list", locals: {
+      task_type: 'unique',
+      task_class: UniqueTask
+    } %>
 <% end %>
 
 <% content_for :scripts do %>
