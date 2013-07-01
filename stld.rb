@@ -11,9 +11,15 @@ use Rack::Flash
 
 helpers do
   def delete_task(task_class)
-    service = TaskService.new
+    service = TaskService.new(task_class)
     id = params[:id].to_i
-    flash[:errors], flash[:notice] = service.try_delete_task(params[:id], RecurringTask)
+    flash[:errors], flash[:notice] = service.try_delete_task(params[:id])
+    redirect to('/tasks')
+  end
+
+  def create_task(task_class)
+    service = TaskService.new(task_class)
+    flash[:errors], flash[:notice] = service.try_create_task(params)
     redirect to('/tasks')
   end
 end
@@ -27,9 +33,11 @@ get '/tasks' do
 end
 
 post '/recurring_task' do
-  service = TaskService.new
-  flash[:errors], flash[:notice] = service.try_create_recurring_task(params)
-    redirect to('/tasks')
+  create_task(RecurringTask)
+end
+
+post '/unique_task' do
+  create_task(UniqueTask)
 end
 
 delete '/recurring_task/:id' do

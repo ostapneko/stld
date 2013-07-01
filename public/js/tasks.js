@@ -1,7 +1,12 @@
 $(function() {
-  var btns = $("#display-recurring-task-form, #hide-recurring-task-form");
-  btns.click(function() {
-    btns.toggle();
-    $("#create-recurring-task-form").fadeToggle("fast");
-  });
+  function prepareForm(taskType) {
+    var btns = $("#display-" + taskType + "-task-form, #hide-" + taskType + "-task-form");
+    btns.click(function() {
+      btns.toggle();
+      $("#create-" + taskType + "-task-form").fadeToggle("fast");
+    });
+  }
+
+  prepareForm("recurring");
+  prepareForm("unique");
 });

@@ -9,7 +9,11 @@ class TaskService
   TASK_DELETED_MSG = "Task deleted!"
   TASK_NOT_FOUND_ERR = "The task to delete could not be found"
 
-  def try_create_recurring_task(params)
+  def initialize(task_class)
+    @task_class = task_class
+  end
+
+  def try_create_task(params)
     task = make_task(params)
 
     if task.valid?
@@ -19,8 +23,8 @@ class TaskService
     end
   end
 
-  def try_delete_task(id, task_class)
-    task = task_class[id]
+  def try_delete_task(id)
+    task = @task_class[id]
     if task
       delete_task(task)
     else
@@ -32,16 +36,20 @@ class TaskService
 
   def make_task(params)
     creation_params = make_creation_params(params)
-    RecurringTask.new(creation_params)
+    @task_class.new(creation_params)
   end
 
   def make_creation_params(params)
-    {
+    common_params = {
       description: params["description"].to_s,
-      frequency:   params["frequency"] && params["frequency"].to_i,
       status:      "todo",
-      enabled:     !!params["enabled"]
     }
+
+    if @task_class == RecurringTask
+      add_recurring_params(common_params, params)
+    else
+      common_params
+    end
   end
 
   def delete_task(task)
@@ -57,5 +65,12 @@ class TaskService
   def save_task(task)
     task.save
     [[], TASK_CREATED_MSG]
+  end
+
+  def add_recurring_params(common_params, params)
+    common_params.merge({
+      frequency: params["frequency"] && params["frequency"].to_i,
+      enabled:   !!params["enabled"]
+    })
   end
 end

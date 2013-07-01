@@ -3,24 +3,26 @@ require_relative '../../services/task_service'
 
 describe TaskService do
   before do
-    @service = TaskService.new
+    @recurring_task_service = TaskService.new(RecurringTask)
+    @unique_task_service = TaskService.new(UniqueTask)
   end
 
-  describe '#try_create_recurring_task' do
+  describe '#try_create_task' do
     before do
       DB[:recurring_tasks].delete
+      DB[:unique_tasks].delete
     end
 
     describe 'when the creations params are valid' do
       before do
-        @params = {
+        params = {
           "description" => "description",
           "frequency"   => 1,
           "status"      => "todo",
           "enabled"     => true,
           "misc_param"  => "foo"
         }
-        @errors, @msg = @service.try_create_recurring_task(@params)
+        @errors, @msg = @recurring_task_service.try_create_task(params)
       end
 
       it "persists a record in the task database" do
@@ -34,12 +36,23 @@ describe TaskService do
       it "returns a success message" do
         @msg.must_equal "Task created!"
       end
+
+      describe "when the task service is given a UniqueTask" do
+        it "creates a UniqueTask" do
+          @unique_task_service.try_create_task({
+            "description" => "description",
+            "status"      => "todo"
+          })
+
+          DB[:unique_tasks].count.must_equal 1
+        end
+      end
     end
 
     describe 'when the creations params are invalid' do
       before do
-        @params = { invalid_params: true }
-        @errors, @msg = @service.try_create_recurring_task(@params)
+        params = { invalid_params: true }
+        @errors, @msg = @recurring_task_service.try_create_task(params)
       end
 
       it "doesn't persist the record" do
@@ -70,7 +83,7 @@ describe TaskService do
 
         id = UniqueTask.first.id
 
-        @errors, @msg = @service.try_delete_task(id, UniqueTask)
+        @errors, @msg = @unique_task_service.try_delete_task(id)
       end
 
       it "deletes the record" do
@@ -88,7 +101,7 @@ describe TaskService do
 
     describe "when the task does not exist" do
       before do
-        @errors, @msg = @service.try_delete_task(1, UniqueTask)
+        @errors, @msg = @unique_task_service.try_delete_task(1)
       end
 
       it "returns an error with a 'task not found' full_messages'" do

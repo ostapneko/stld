@@ -11,18 +11,24 @@ tr.edit-task td.little-cell {
 }
 
 button#display-recurring-task-form,
-button#hide-recurring-task-form {
+button#hide-recurring-task-form,
+button#display-unique-task-form,
+button#hide-unique-task-form
+{
   margin-bottom: 15px;
 }
 
+button#hide-unique-task-form,
 button#hide-recurring-task-form {
   display: none;
 }
 
+form#create-unique-task-form,
 form#create-recurring-task-form {
   display: none;
 }
 
+form#create-unique-task-form input[name="description"],
 form#create-recurring-task-form input[name="description"] {
   width: 400px;
 }
