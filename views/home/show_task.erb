@@ -15,7 +15,11 @@
     <% if type == :recurring %>
       Every <%= task.frequency %> week(s)
     <% else %>
-      <button class="btn">Postpone</button>
+      <form action="/unique_task/<%= task.id %>", method="post">
+        <button type="submit" class="btn">Postpone</button>
+        <input name="status" type="hidden" value="not_started" />
+        <input name="_method" type="hidden" value="put" />
+      </form>
     <% end %>
   </td>
 </div>

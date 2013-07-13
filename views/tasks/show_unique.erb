@@ -8,7 +8,11 @@
     <button class="btn hide-task-form" id="hide-unique-task-form-<%= task.id %>"><i class="icon-ban-circle"></i> Cancel</button>
   </div>
   <div class="span3">
-    <button class="btn"><i class="icon-edit"></i> Affect to sprint</button>
+    <form action="/unique_task/<%= task.id %>", method="post">
+      <button type="submit" class="btn"><i class="icon-edit"></i> Affect to sprint</button>
+      <input name="status" type="hidden" value="todo" />
+      <input name="_method" type="hidden" value="put" />
+    </form>
   </div>
   <div class="span2">
     <form action="/unique_task/<%= task.id %>", method="post">

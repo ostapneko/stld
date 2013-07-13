@@ -8,9 +8,18 @@
     <button class="btn hide-task-form" id="hide-recurring-task-form-<%= task.id %>"><i class="icon-ban-circle"></i> Cancel</button>
   </div>
   <div class="span3">
-    <div class="btn-group" data-toggle="buttons-radio">
-      <button type="button" class="btn<%= ' active' if task.enabled %>"><i class="icon-plus"></i> Enabled</button>
-      <button type="button" class="btn<%= ' active' unless task.enabled %>">Disabled <i class="icon-minus"></i></button>
+    <div>
+      <form action="/recurring_task/<%= task.id %>", method="post">
+        <% if task.enabled %>
+          <button class="btn disabled"><i class="icon-plus"></i> Enabled</button>
+          <button type="submit" class="btn">Disable! <i class="icon-minus"></i></button>
+        <% else %>
+          <button type="submit"  class="btn"><i class="icon-plus"></i> Enable!</button>
+          <button class="btn disabled">Disabled <i class="icon-minus"></i></button>
+        <% end %>
+        <input name="enabled" type="hidden" value="<%= !task.enabled %>" />
+        <input name="_method" type="hidden" value="put" />
+      </form>
     </div>
   </div>
   <div class="span2">

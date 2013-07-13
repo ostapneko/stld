@@ -4,7 +4,7 @@
   id: "creation"
 } %>
 <div>
-  <% task_class.all.each do |task| %>
+  <% task_class.shown_in_task_list.each do |task| %>
     <%= erb :"tasks/show_#{task_type}", locals: {
       task: task
     } %>

@@ -14,4 +14,8 @@ class UniqueTask < Sequel::Model
   def self.active
     where(status: "todo")
   end
+
+  def self.shown_in_task_list
+    where(status: "not_started")
+  end
 end
