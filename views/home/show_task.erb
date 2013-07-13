@@ -1,7 +1,7 @@
 <% is_done = task.status == "done" %>
 <tr>
   <td>
-    <%= task.description %>
+    <%= h task.description %>
   </td>
   <td>
     <% if is_done %><i class="icon-ok"></i><% end %>

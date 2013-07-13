@@ -6,8 +6,10 @@ require_relative 'models/recurring_task'
 require_relative 'models/unique_task'
 require_relative 'services/task_service'
 
+
 enable :sessions
 use Rack::Flash
+include ERB::Util
 
 helpers do
   def create_task(task_class)
