@@ -6,7 +6,7 @@ class RecurringTask < Sequel::Model
 
   def validate
     super
-    validates_presence [:description, :frequency, :enabled, :status]
+    validates_presence [:description, :frequency, :enabled, :status, :started_at_week, :started_at_year]
     validates_unique [:description]
     validates_includes %w(todo done skip), :status
   end

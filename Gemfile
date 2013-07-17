@@ -8,8 +8,10 @@ gem 'pg'
 
 group :development do
   gem 'rerun'
+  gem 'pry'
 end
 
 group :test do
   gem 'minitest'
+  gem 'pry'
 end

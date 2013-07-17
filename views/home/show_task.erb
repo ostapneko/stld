@@ -10,6 +10,7 @@
     <div class="btn-group" data-toggle="buttons-radio">
       <button type="button" class="btn<%= ' active' unless is_done %>">Not Done</button>
       <button type="button" class="btn btn-success <%= ' active' if is_done %>">Done</button>
+    </div>
   </td>
   <td>
     <% if type == :recurring %>
@@ -22,4 +23,4 @@
       </form>
     <% end %>
   </td>
-</div>
+</tr>

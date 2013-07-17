@@ -85,11 +85,21 @@ class TaskService
     [[], TASK_UPDATED_MSG]
   end
 
+  def current_week
+    Time.now.strftime("%V").to_i
+  end
+
+  def current_year
+    Time.now.year
+  end
+
   def add_recurring_params(common_params, params)
     common_params.merge({
       frequency: params["frequency"] && params["frequency"].to_i,
       status:    "todo",
-      enabled:   !!params["enabled"]
+      enabled:   !!params["enabled"],
+      started_at_week: current_week,
+      started_at_year: current_year
     })
   end
 
