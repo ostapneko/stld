@@ -1,12 +1,11 @@
 require_relative '../test_helper'
+require_relative '../../lib/date_helpers'
 require_relative '../../services/task_service'
 
 describe TaskService do
   before do
     @recurring_task_service = TaskService.new(RecurringTask)
     @unique_task_service = TaskService.new(UniqueTask)
-    @week = Time.now.strftime("%V").to_i
-    @year = Time.now.year
   end
 
   describe '#try_create' do
@@ -40,8 +39,8 @@ describe TaskService do
       end
 
       it "remembers the week and year the task was started" do
-        DB[:recurring_tasks].first[:started_at_week].must_equal(@week)
-        DB[:recurring_tasks].first[:started_at_year].must_equal(@year)
+        DB[:recurring_tasks].first[:started_at_week].must_equal(DateHelpers.current_week)
+        DB[:recurring_tasks].first[:started_at_year].must_equal(DateHelpers.current_year)
       end
 
       describe "when the task service is given a UniqueTask" do

@@ -6,10 +6,11 @@
         <h2>Recurring</h2>
         <table class="table">
           <% RecurringTask.active.each do |task| %>
-            <%= erb :"home/show_task", locals: {
-              type: :recurring,
-              task: task
-            } %>
+            <% if task.due_this_week? %>
+              <%= erb :"home/show_task", locals: {
+                type: :recurring,
+                task: task } %>
+            <% end %>
           <% end %>
         </table>
       </div>
@@ -19,11 +20,9 @@
           <% UniqueTask.active.each do |task| %>
             <%= erb :"home/show_task", locals: {
               type: :unique,
-              task: task
-            } %>
+              task: task } %>
           <% end %>
-          </table>
-        </div>
+        </table>
       </div>
     </div>
   </div>

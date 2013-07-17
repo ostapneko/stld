@@ -1,10 +1,13 @@
 require_relative '../config/connection'
 require_relative '../models/recurring_task'
 require_relative '../models/unique_task'
+require_relative '../lib/date_helpers'
 
 require 'ostruct'
 
 class TaskService
+  include DateHelpers
+
   TASK_CREATED_MSG = "Task created!"
   TASK_UPDATED_MSG = "Task updated!"
   TASK_DELETED_MSG = "Task deleted!"
@@ -83,14 +86,6 @@ class TaskService
   def update(task)
     task.save
     [[], TASK_UPDATED_MSG]
-  end
-
-  def current_week
-    Time.now.strftime("%V").to_i
-  end
-
-  def current_year
-    Time.now.year
   end
 
   def add_recurring_params(common_params, params)
