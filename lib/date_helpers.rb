@@ -9,6 +9,10 @@ module DateHelpers
     Time.now.strftime("%G").to_i
   end
 
+  def sunday
+    Time.now.sunday?
+  end
+
   def number_of_weeks(year, week_num)
     year * 52 + week_num
   end

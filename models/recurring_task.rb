@@ -19,7 +19,7 @@ class RecurringTask < Sequel::Model
   end
 
   def self.active
-    enabled.where(status: ["todo", "done"])
+    enabled.where(status: ["todo"])
   end
 
   def self.shown_in_task_list

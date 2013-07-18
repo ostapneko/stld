@@ -25,5 +25,10 @@
         </table>
       </div>
     </div>
+    <% if DateHelpers.sunday %>
+      <div class="alert">
+        <strong>Hurry up!</strong> You have one day left to finish all your tasks.
+      </div>
+    <% end %>
   </div>
 <% end %>
