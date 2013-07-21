@@ -5,7 +5,7 @@
       <div class="span6">
         <h2>Recurring</h2>
         <table class="table">
-          <% RecurringTask.active.each do |task| %>
+          <% RecurringTask.active.order(:id).each do |task| %>
             <% if task.due_this_week? %>
               <%= erb :"home/show_task", locals: {
                 type: :recurring,
@@ -17,7 +17,7 @@
       <div class="span6">
         <h2>Unique task</h2>
         <table class="table">
-          <% UniqueTask.active.each do |task| %>
+          <% UniqueTask.active.order(:id).each do |task| %>
             <%= erb :"home/show_task", locals: {
               type: :unique,
               task: task } %>
@@ -25,6 +25,15 @@
         </table>
       </div>
     </div>
+    <% if Sprint.current.overdue? %>
+      <div class="row">
+        <div class="span5 offset5">
+          <form action="/start_new_sprint", method="post">
+            <button class="btn btn-primary">Start new sprint</button>
+          </form>
+        </div>
+      </div>
+    <% end %>
     <% if DateHelpers.sunday %>
       <div class="alert">
         <strong>Hurry up!</strong> You have one day left to finish all your tasks.

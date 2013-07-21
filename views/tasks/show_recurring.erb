@@ -11,11 +11,11 @@
     <div>
       <form action="/recurring_task/<%= task.id %>", method="post">
         <% if task.enabled %>
-          <button class="btn disabled"><i class="icon-plus"></i> Enabled</button>
+          <div class="btn disabled"><i class="icon-plus"></i> Enabled</div>
           <button type="submit" class="btn">Disable! <i class="icon-minus"></i></button>
         <% else %>
           <button type="submit"  class="btn"><i class="icon-plus"></i> Enable!</button>
-          <button class="btn disabled">Disabled <i class="icon-minus"></i></button>
+          <div class="btn disabled">Disabled <i class="icon-minus"></i></div>
         <% end %>
         <input name="enabled" type="hidden" value="<%= !task.enabled %>" />
         <input name="_method" type="hidden" value="put" />

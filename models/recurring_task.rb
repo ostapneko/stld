@@ -23,8 +23,9 @@ class RecurringTask < Sequel::Model
   end
 
   def self.shown_in_task_list
-    all
+    order(:id)
   end
+
 
   def due_this_week?
     due_for_week?(current_year, current_week)

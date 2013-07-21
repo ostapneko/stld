@@ -20,6 +20,6 @@ class UniqueTask < Sequel::Model
   end
 
   def self.shown_in_task_list
-    where(status: "not_started")
+    where(status: "not_started").order(:id)
   end
 end
