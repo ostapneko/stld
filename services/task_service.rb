@@ -1,10 +1,13 @@
 require_relative '../config/connection'
 require_relative '../models/recurring_task'
 require_relative '../models/unique_task'
+require_relative '../lib/date_helpers'
 
 require 'ostruct'
 
 class TaskService
+  include DateHelpers
+
   TASK_CREATED_MSG = "Task created!"
   TASK_UPDATED_MSG = "Task updated!"
   TASK_DELETED_MSG = "Task deleted!"
@@ -89,7 +92,9 @@ class TaskService
     common_params.merge({
       frequency: params["frequency"] && params["frequency"].to_i,
       status:    "todo",
-      enabled:   !!params["enabled"]
+      enabled:   !!params["enabled"],
+      started_at_week: current_week,
+      started_at_year: current_year
     })
   end
 
