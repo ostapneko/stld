@@ -4,7 +4,7 @@ Sequel.migration do
       Integer :year, null: false
       Integer :week, null: false
 
-      unique([:year, :week)
+      unique([:year, :week])
       index :year
       index :week
     end
