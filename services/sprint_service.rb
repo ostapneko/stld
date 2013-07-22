@@ -28,9 +28,11 @@ class SprintService
   end
 
   def save(sprint)
-    sprint.save
-    update_recurring_tasks
-    [[], SPRINT_CREATED_MSG]
+    DB.transaction do
+      sprint.save
+      update_recurring_tasks
+      [[], SPRINT_CREATED_MSG]
+    end
   end
 
   def update_recurring_tasks

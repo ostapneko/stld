@@ -1,16 +1,15 @@
 <% content_for :body do %>
   <div class="container">
-    <h1>This week</h1>
+    <h1>Current sprint</h1>
+    <h3>Week <%= Sprint.current.week %> - <%= Sprint.current.year %></h3>
     <div class="row">
       <div class="span6">
         <h2>Recurring</h2>
         <table class="table">
           <% RecurringTask.active.order(:id).each do |task| %>
-            <% if task.due_this_week? %>
-              <%= erb :"home/show_task", locals: {
-                type: :recurring,
-                task: task } %>
-            <% end %>
+            <%= erb :"home/show_task", locals: {
+              type: :recurring,
+              task: task } %>
           <% end %>
         </table>
       </div>
@@ -34,7 +33,7 @@
         </div>
       </div>
     <% end %>
-    <% if DateHelpers.sunday %>
+    <% if DateHelpers.sunday? %>
       <div class="alert">
         <strong>Hurry up!</strong> You have one day left to finish all your tasks.
       </div>

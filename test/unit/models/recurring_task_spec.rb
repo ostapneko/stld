@@ -4,14 +4,9 @@ require_relative '../../../models/recurring_task'
 describe RecurringTask do
 
   before do
+    DB[:recurring_tasks].delete
     @task1 = RecurringTask.new(description: 'description', enabled: true, status: 'todo', started_at_week: 20, started_at_year: 2013, frequency: 2)
     @task2 = RecurringTask.new(description: 'description2', enabled: true, status: 'todo', started_at_week: 52, started_at_year: 2013, frequency: 2)
-  end
-
-  after do
-    RecurringTask.each do |t|
-      t.destroy
-    end
   end
 
   describe '#due_for_week?' do

@@ -9,7 +9,7 @@ module DateHelpers
     Time.now.strftime("%G").to_i
   end
 
-  def sunday
+  def sunday?
     Time.now.sunday?
   end
 
