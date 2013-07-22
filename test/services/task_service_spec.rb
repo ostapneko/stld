@@ -1,4 +1,5 @@
 require_relative '../test_helper'
+require_relative '../../lib/date_helpers'
 require_relative '../../services/task_service'
 
 describe TaskService do
@@ -35,6 +36,11 @@ describe TaskService do
 
       it "returns a success message" do
         @msg.must_equal "Task created!"
+      end
+
+      it "remembers the week and year the task was started" do
+        DB[:recurring_tasks].first[:started_at_week].must_equal(DateHelpers.current_week)
+        DB[:recurring_tasks].first[:started_at_year].must_equal(DateHelpers.current_year)
       end
 
       describe "when the task service is given a UniqueTask" do

@@ -1,9 +1,11 @@
 require 'sinatra'
 require 'sinatra/content_for'
 require 'rack-flash'
+require 'pry'
 
 require_relative 'models/recurring_task'
 require_relative 'models/unique_task'
+require_relative 'models/sprint'
 require_relative 'services/task_service'
 
 
@@ -31,6 +33,7 @@ helpers do
     flash[:errors], flash[:notice] = service.try_update(id, params)
     redirect to('/tasks')
   end
+
 end
 
 get '/' do
@@ -63,4 +66,9 @@ end
 
 put '/unique_task/:id' do
   update_task(UniqueTask)
+end
+
+post '/start_new_sprint' do
+  flash[:errors], flash[:notice] = SprintService.new.start_new_sprint
+  redirect to('/')
 end

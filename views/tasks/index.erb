@@ -9,13 +9,26 @@
     <h2>Recurring</h2>
     <%= erb :"tasks/task_list", locals: {
       task_type: 'recurring',
-      task_class: RecurringTask
-    } %>
+      task_class: RecurringTask } %>
     <h2>Unique</h2>
     <%= erb :"tasks/task_list", locals: {
       task_type: 'unique',
-      task_class: UniqueTask
-    } %>
+      task_class: UniqueTask } %>
+    <h2>Done</h2>
+    <% UniqueTask.done.each do |task| %>
+      <div class="row">
+        <div class="span3">
+          <%= task.description %>
+        </div>
+        <div class="span2 offset7">
+          <form action="/unique_task/<%= task.id %>", method="post">
+            <button class="btn btn-danger"><i class="icon-remove icon-white"></i> Delete</button>
+            <input name="_method" type="hidden" value="delete" />
+          </form>
+        </div>
+      </div>
+    <% end %>
+  </div>
 <% end %>
 
 <% content_for :scripts do %>

@@ -1,9 +1,12 @@
 Sequel.migration do
   change do
     create_table(:sprints) do
-      primary_key :id
-      Integer :week_number, null: false
       Integer :year, null: false
+      Integer :week, null: false
+
+      unique([:year, :week)
+      index :year
+      index :week
     end
   end
 end
