@@ -8,4 +8,4 @@ before_script:
   - bundle exec sequel -M 0 -m migrations -E postgres://postgres@127.0.0.1:5432/stld_test
   - bundle exec sequel -m migrations -E postgres://postgres@127.0.0.1:5432/stld_test
 
-script: ruby ./script/test.rb
+script: bundle exec ruby ./script/test.rb
