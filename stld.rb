@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/content_for'
 require 'rack-flash'
-require 'pry'
+require 'json'
 
 require_relative 'models/recurring_task'
 require_relative 'models/unique_task'
@@ -23,8 +23,14 @@ helpers do
   def delete_task(task_class)
     service = TaskService.new(task_class)
     id = params[:id].to_i
-    flash[:errors], flash[:notice] = service.try_delete(id)
-    redirect to('/tasks')
+    errors, notice = service.try_delete(id)
+    if request.xhr?
+      content_type :json
+      {id: id, errors: errors, notice: notice }.to_json
+    else
+      flash[:errors], flash[:notice] = errors, notice
+      redirect to('tasks')
+    end
   end
 
   def update_task(task_class)
@@ -33,7 +39,6 @@ helpers do
     flash[:errors], flash[:notice] = service.try_update(id, params)
     redirect to('/tasks')
   end
-
 end
 
 get '/' do
