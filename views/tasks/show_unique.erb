@@ -1,21 +1,25 @@
-<div class="row">
+<div class="row" id="task-<%= task.id %>">
   <div class="span3">
     <%= h task.description %>
   </div>
   <div class="span2"></div>
   <div class="span2">
-    <button class="btn show-task-form" id="show-unique-task-form-<%= task.id %>"><i class="icon-edit"></i> Edit</button>
-    <button class="btn hide-task-form" id="hide-unique-task-form-<%= task.id %>"><i class="icon-ban-circle"></i> Cancel</button>
+    <% unless task.done %>
+      <button class="btn show-task-form" id="show-unique-task-form-<%= task.id %>"><i class="icon-edit"></i> Edit</button>
+      <button class="btn hide-task-form" id="hide-unique-task-form-<%= task.id %>"><i class="icon-ban-circle"></i> Cancel</button>
+    <% end %>
   </div>
   <div class="span3">
-    <form action="/unique_task/<%= task.id %>", method="post">
-      <button type="submit" class="btn"><i class="icon-edit"></i> Affect to sprint</button>
-      <input name="status" type="hidden" value="todo" />
-      <input name="_method" type="hidden" value="put" />
-    </form>
+    <% unless task.done %>
+      <form action="/unique_task/<%= task.id %>", method="post">
+        <button type="submit" class="btn"><i class="icon-edit"></i> Affect to sprint</button>
+        <input name="status" type="hidden" value="todo" />
+        <input name="_method" type="hidden" value="put" />
+      </form>
+    <% end %>
   </div>
   <div class="span2">
-    <form action="/unique_task/<%= task.id %>", method="post">
+    <form class="delete-task" action="/unique_task/<%= task.id %>", method="post">
       <button class="btn btn-danger"><i class="icon-remove icon-white"></i> Delete</button>
       <input name="_method" type="hidden" value="delete" />
     </form>

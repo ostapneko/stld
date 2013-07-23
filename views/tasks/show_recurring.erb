@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" id="task-<%= task.id %>">
   <div class="span3">
     <%= h task.description %>
   </div>
@@ -23,8 +23,8 @@
     </div>
   </div>
   <div class="span2">
-    <form action="/recurring_task/<%= task.id %>", method="post">
-      <button class="btn btn-danger"><i class="icon-remove icon-white"></i> Delete</button>
+    <form class="delete-task" action="/recurring_task/<%= task.id %>", method="post">
+      <button class="btn btn-danger delete-recurring-task"><i class="icon-remove icon-white"></i> Delete</button>
       <input name="_method" type="hidden" value="delete" />
     </form>
   </div>
