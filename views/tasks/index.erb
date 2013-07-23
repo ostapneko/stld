@@ -16,17 +16,8 @@
       task_class: UniqueTask } %>
     <h2>Done</h2>
     <% UniqueTask.done.each do |task| %>
-      <div class="row">
-        <div class="span3">
-          <%= task.description %>
-        </div>
-        <div class="span2 offset7">
-          <form action="/unique_task/<%= task.id %>", method="post">
-            <button class="btn btn-danger"><i class="icon-remove icon-white"></i> Delete</button>
-            <input name="_method" type="hidden" value="delete" />
-          </form>
-        </div>
-      </div>
+      <%= erb :"tasks/show_unique" , locals: {
+        task: task } %>
     <% end %>
   </div>
 <% end %>
