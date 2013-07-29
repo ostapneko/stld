@@ -12,6 +12,7 @@ test/tmp
 test/version_tmp
 tmp
 config/database.yml
+config/unicorn.rb
 public/js
 
 # YARD artifacts
