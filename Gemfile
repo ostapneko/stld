@@ -12,4 +12,6 @@ end
 
 group :test do
   gem 'minitest'
+  gem 'capybara'
+  gem 'selenium-webdriver'
 end
