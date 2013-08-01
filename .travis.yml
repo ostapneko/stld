@@ -10,4 +10,6 @@ before_script:
   - RACK_ENV=test bundle exec ruby script/recreate_db.rb
   - script/compile_js.sh
 
-script: bundle exec ruby ./script/test.rb
+script:
+  - bundle exec ruby ./script/test.rb
+  - bundle exec ruby ./script/test.rb features
