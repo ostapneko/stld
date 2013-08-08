@@ -7,7 +7,8 @@ before_install:
 before_script:
   - cp config/database.yml.sample config/database.yml
   - psql -c 'create database stld_test;' -U postgres
-  - RACK_ENV=test bundle exec ruby script/recreate_db.rb
+  - RACK_ENV=test bundle exec ruby script/migrate.rb destroy
+  - RACK_ENV=test bundle exec ruby script/migrate.rb
   - script/compile_js.sh
 
 script:
