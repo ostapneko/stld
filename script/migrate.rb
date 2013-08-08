@@ -1,5 +1,4 @@
 #!/bin/env ruby
-
 require 'yaml'
 
 class Migrator
