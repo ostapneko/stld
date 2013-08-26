@@ -6,14 +6,14 @@
   <div class="container">
     <%= erb :"tasks/notifications" %>
     <h1>Tasks</h1>
-    <h2>Recurring</h2>
-    <%= erb :"tasks/task_list", locals: {
-      task_type: 'recurring',
-      task_class: RecurringTask } %>
     <h2>Unique</h2>
     <%= erb :"tasks/task_list", locals: {
       task_type: 'unique',
       task_class: UniqueTask } %>
+    <h2>Recurring</h2>
+    <%= erb :"tasks/task_list", locals: {
+      task_type: 'recurring',
+      task_class: RecurringTask } %>
     <h2>Done</h2>
     <% UniqueTask.done.each do |task| %>
       <%= erb :"tasks/show_unique" , locals: {

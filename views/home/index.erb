@@ -4,21 +4,21 @@
     <h3>Week <%= Sprint.current.week %> - <%= Sprint.current.year %></h3>
     <div class="row">
       <div class="span6">
-        <h2>Recurring</h2>
-        <table class="table">
-          <% RecurringTask.active.order(:id).each do |task| %>
-            <%= erb :"home/show_task", locals: {
-              type: :recurring,
-              task: task } %>
-          <% end %>
-        </table>
-      </div>
-      <div class="span6">
         <h2>Unique task</h2>
         <table class="table">
           <% UniqueTask.active.order(:id).each do |task| %>
             <%= erb :"home/show_task", locals: {
               type: :unique,
+              task: task } %>
+          <% end %>
+        </table>
+      </div>
+      <div class="span6">
+        <h2>Recurring</h2>
+        <table class="table">
+          <% RecurringTask.active.order(:id).each do |task| %>
+            <%= erb :"home/show_task", locals: {
+              type: :recurring,
               task: task } %>
           <% end %>
         </table>
