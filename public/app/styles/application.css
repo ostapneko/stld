@@ -1,0 +1,23 @@
+body {
+  margin-top: 100px;
+}
+
+a:focus {
+  outline: 0;
+}
+
+table.tasks.table > tbody > tr > td {
+  padding: 15px;
+}
+
+.task-btn {
+  width: 115px;
+}
+
+#unique-tasks, #recurring-tasks {
+  margin-bottom: 100px;
+}
+
+.btn-expand {
+  color: black;
+}

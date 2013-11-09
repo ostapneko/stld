@@ -1,11 +1,13 @@
 require_relative '../test_helper'
 require_relative '../../lib/date_helpers'
 require_relative '../../services/task_service'
+require_relative '../../services/unique_task_service'
+require_relative '../../services/recurring_task_service'
 
 describe TaskService do
   before do
-    @recurring_task_service = TaskService.new(RecurringTask)
-    @unique_task_service = TaskService.new(UniqueTask)
+    @recurring_task_service = TaskService.build(RecurringTask)
+    @unique_task_service = TaskService.build(UniqueTask)
   end
 
   describe '#try_create' do

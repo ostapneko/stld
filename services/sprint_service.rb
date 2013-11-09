@@ -30,19 +30,8 @@ class SprintService
   def save(sprint)
     DB.transaction do
       sprint.save
-      update_recurring_tasks
+      RecurringTaskService.new.update_recurring_tasks
       [[], SPRINT_CREATED_MSG]
-    end
-  end
-
-  def update_recurring_tasks
-    RecurringTask.enabled.each do |t|
-      if t.due_this_week? || t.status == 'todo'
-        t.status = 'todo'
-      else
-        t.status = 'skip'
-      end
-      t.save
     end
   end
 end

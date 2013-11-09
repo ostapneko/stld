@@ -1,20 +1,46 @@
 require_relative '../config/connection'
 require_relative '../models/recurring_task'
 require_relative '../models/unique_task'
-require_relative '../lib/date_helpers'
 
 require 'ostruct'
 
+
 class TaskService
-  include DateHelpers
+  class Result < Struct.new(:status, :body)
+  end
 
   TASK_CREATED_MSG = "Task created!"
   TASK_UPDATED_MSG = "Task updated!"
   TASK_DELETED_MSG = "Task deleted!"
-  TASK_NOT_FOUND_ERR = "The task to delete could not be found"
+  TASK_NOT_FOUND_ERR = "The task could not be found"
+  NOT_PARSABLE_ERR = "Your request could not be parsed"
 
-  def initialize(task_class)
-    @task_class = task_class
+  def initialize
+    raise "Abstract class, instantiate child classes instead"
+  end
+
+  def self.build(task_class)
+    case task_class.to_s
+    when "UniqueTask"; UniqueTaskService.new
+    when "RecurringTask"; RecurringTaskService.new
+    else raise "Cannot build task service for #{task_class}"
+    end
+  end
+
+  def with_task(task_id, &block)
+    task = @task_class[task_id]
+    return fail_task_not_found unless task
+    yield task
+  end
+
+  def with_params(payload, &block)
+    params =
+      begin
+        JSON.parse payload
+      rescue
+        return fail_non_parsable_payload
+      end
+    yield params
   end
 
   def try_create(params)
@@ -35,18 +61,8 @@ class TaskService
     end
   end
 
-  def try_update(id, params)
-    task = @task_class[id]
-    return fail_task_not_found unless task
-    updated_keys = (task.keys.map(&:to_s) & params.keys) - ["id"]
-    updated_keys.each do |k|
-      task.set(k.to_sym => params[k])
-    end
-    if task.valid?
-      update(task)
-    else
-      return [task.errors.full_messages, nil]
-    end
+  def getAll
+    @task_class.all
   end
 
   private
@@ -60,12 +76,7 @@ class TaskService
     common_params = {
       description: params["description"].to_s
     }
-
-    if @task_class == RecurringTask
-      add_recurring_params(common_params, params)
-    else
-      add_unique_params(common_params, params)
-    end
+    add_params(common_params, params)
   end
 
   def delete(task)
@@ -73,9 +84,26 @@ class TaskService
     [[], TASK_DELETED_MSG]
   end
 
+  def ok
+    Result.new(200, { "status" => "OK" })
+  end
+
   def fail_task_not_found
-    errors = [TASK_NOT_FOUND_ERR]
-    [errors, nil]
+    body = {
+      "error_message" => TASK_NOT_FOUND_ERR,
+      "status"        => "NOT_FOUND"
+    }
+
+    Result.new(404, body)
+  end
+
+  def fail_non_parsable_payload
+    body = {
+      "error_message" => NOT_PARSABLE_ERR,
+      "status"        => "UNPARSABLE ENTITY"
+    }
+
+    Result.new(400, body)
   end
 
   def save(task)
@@ -86,22 +114,5 @@ class TaskService
   def update(task)
     task.save
     [[], TASK_UPDATED_MSG]
-  end
-
-  def add_recurring_params(common_params, params)
-    common_params.merge({
-      frequency: params["frequency"] && params["frequency"].to_i,
-      status:    "todo",
-      enabled:   !!params["enabled"],
-      started_at_week: current_week,
-      started_at_year: current_year
-    })
-  end
-
-  def add_unique_params(common_params, params)
-    status = params["todo"] ? "todo" : "not_started"
-    common_params.merge({
-      status: status
-    })
   end
 end
