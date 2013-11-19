@@ -22,7 +22,8 @@ stldAppModule
             displayAction: ->
               if @enabled then "Disable" else "Enable"
 
-        $scope.tasks          = []
+        $scope.uniqueTasks    = []
+        $scope.recurringTasks = []
         $scope.taskFilter     = { active: true }
         $scope.tasksDisplayed = { unique: true, recurring: true }
         $scope.taskFilter     = "thisWeek"
@@ -68,6 +69,16 @@ stldAppModule
                 .success( (data, status, headers, config) ->
                     task.description = task.tempDescription
                     task.mode = 'show'
+                )
+                .error ( (data, status, headers, config) ->
+                    console.log(data, status, headers, config)
+                )
+
+        $scope.deleteUniqueTask = (task) ->
+            $http.delete("unique-task/#{task.id}")
+                .success( (data, status, headers, config) ->
+                    i = $scope.uniqueTasks.indexOf(task)
+                    $scope.uniqueTasks.splice(i, 1)
                 )
                 .error ( (data, status, headers, config) ->
                     console.log(data, status, headers, config)

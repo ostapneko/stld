@@ -29,14 +29,11 @@ helpers do
   def delete_task(task_class)
     service = TaskService.build(task_class)
     id = params[:id].to_i
-    errors, notice = service.try_delete(id)
-    if request.xhr?
-      content_type :json
-      {id: id, errors: errors, notice: notice }.to_json
-    else
-      flash[:errors], flash[:notice] = errors, notice
-      redirect to('tasks')
-    end
+    result = service.try_delete(id)
+
+    content_type :json
+    status       result.status
+    body         result.body.to_json
   end
 
   def update_task(task_class)
@@ -74,7 +71,7 @@ delete '/recurring_task/:id' do
   delete_task(RecurringTask)
 end
 
-delete '/unique_task/:id' do
+delete '/unique-task/:id' do
   delete_task(UniqueTask)
 end
 

@@ -1,18 +1,10 @@
 require_relative '../config/connection'
 require_relative '../models/recurring_task'
 require_relative '../models/unique_task'
+require_relative '../presenters/task_presenter'
 
 class TaskService
-  class Result < Struct.new(:status, :body)
-  end
-
-  TASK_CREATED_MSG = "Task created!"
-  TASK_UPDATED_MSG = "Task updated!"
-  TASK_DELETED_MSG = "Task deleted!"
-  TASK_NOT_FOUND_ERR = "The task could not be found"
-  NOT_PARSABLE_ERR = "Your request could not be parsed"
-  TASK_INVALID_ERR = "Task validation failed: %s"
-
+  
   def initialize
     raise "Abstract class, instantiate child classes instead"
   end
@@ -27,7 +19,7 @@ class TaskService
 
   def with_task(task_id, &block)
     task = @task_class[task_id]
-    return fail_task_not_found unless task
+    return TaskPresenter.fail_task_not_found unless task
     yield task
   end
 
@@ -36,7 +28,7 @@ class TaskService
       begin
         JSON.parse payload
       rescue
-        return fail_non_parsable_payload
+        return TaskPresenter.fail_non_parsable_payload
       end
     yield params
   end
@@ -48,7 +40,7 @@ class TaskService
       if task.valid?
         create(task)
       else
-        fail_task_invalid(task)
+        TaskPresenter.fail_task_invalid(task)
       end
     end
   end
@@ -58,7 +50,7 @@ class TaskService
     if task
       delete(task)
     else
-      fail_task_not_found
+      TaskPresenter.fail_task_not_found
     end
   end
 
@@ -82,52 +74,16 @@ class TaskService
 
   def delete(task)
     task.delete
-    ok(TASK_DELETED_MSG)
+    TaskPresenter.ok('Task deleted!')
   end
 
   def create(task)
     task.save
-    ok(TASK_CREATED_MSG)
+    TaskPresenter.ok('Task created!')
   end
 
   def update(task)
     task.save
-    ok(TASK_UPDATED_MSG)
+    TaskPresenter.ok('Task updated!')
   end
-
-  def ok(msg)
-    body = {
-      "success_message" => msg,
-      "status"        => "NOT_FOUND"
-    }
-    Result.new(200, body)
-  end
-
-  def fail_task_not_found
-    body = {
-      "error_message" => TASK_NOT_FOUND_ERR,
-      "status"        => "NOT_FOUND"
-    }
-
-    Result.new(404, body)
-  end
-
-  def fail_non_parsable_payload
-    body = {
-      "error_message" => NOT_PARSABLE_ERR,
-      "status"        => "UNPARSABLE ENTITY"
-    }
-
-    Result.new(400, body)
-  end
-
-  def fail_task_invalid(task)
-    body = {
-      "error_message" => TASK_INVALID_ERR % task.errors.full_messages,
-      "status"        => "INVALID REQUEST"
-    }
-
-    Result.new(400, body)
-  end
-
 end

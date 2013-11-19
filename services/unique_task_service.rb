@@ -30,7 +30,7 @@ class UniqueTaskService < TaskService
         if task.valid?
           update(task)
         else
-          fail_task_invalid(task)
+          TaskPresenter.fail_task_invalid(task)
         end
       end
     end
