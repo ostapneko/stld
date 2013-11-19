@@ -2,9 +2,6 @@ require_relative '../config/connection'
 require_relative '../models/recurring_task'
 require_relative '../models/unique_task'
 
-require 'ostruct'
-
-
 class TaskService
   class Result < Struct.new(:status, :body)
   end
@@ -14,6 +11,7 @@ class TaskService
   TASK_DELETED_MSG = "Task deleted!"
   TASK_NOT_FOUND_ERR = "The task could not be found"
   NOT_PARSABLE_ERR = "Your request could not be parsed"
+  TASK_INVALID_ERR = "Task validation failed: %s"
 
   def initialize
     raise "Abstract class, instantiate child classes instead"
@@ -43,12 +41,15 @@ class TaskService
     yield params
   end
 
-  def try_create(params)
-    task = make(params)
-    if task.valid?
-      save(task)
-    else
-      return [task.errors.full_messages, nil]
+  def try_create(payload)
+    with_params(payload) do |params|
+      task = make(params)
+
+      if task.valid?
+        create(task)
+      else
+        fail_task_invalid(task)
+      end
     end
   end
 
@@ -81,11 +82,25 @@ class TaskService
 
   def delete(task)
     task.delete
-    [[], TASK_DELETED_MSG]
+    ok(TASK_DELETED_MSG)
   end
 
-  def ok
-    Result.new(200, { "status" => "OK" })
+  def create(task)
+    task.save
+    ok(TASK_CREATED_MSG)
+  end
+
+  def update(task)
+    task.save
+    ok(TASK_UPDATED_MSG)
+  end
+
+  def ok(msg)
+    body = {
+      "success_message" => msg,
+      "status"        => "NOT_FOUND"
+    }
+    Result.new(200, body)
   end
 
   def fail_task_not_found
@@ -106,13 +121,13 @@ class TaskService
     Result.new(400, body)
   end
 
-  def save(task)
-    task.save
-    [[], TASK_CREATED_MSG]
+  def fail_task_invalid(task)
+    body = {
+      "error_message" => TASK_INVALID_ERR % task.errors.full_messages,
+      "status"        => "INVALID REQUEST"
+    }
+
+    Result.new(400, body)
   end
 
-  def update(task)
-    task.save
-    [[], TASK_UPDATED_MSG]
-  end
 end

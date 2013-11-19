@@ -14,6 +14,10 @@ class RecurringTaskService < TaskService
     end
   end
 
+  def get_enabled
+    RecurringTask.where(enabled: true)
+  end
+
   def update_recurring_tasks
     get_enabled.each do |t|
       if t.due_this_week? || t.status == 'todo'
