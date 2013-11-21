@@ -1,17 +1,16 @@
 class TaskPresenter
+  TASK_NOT_FOUND_ERR = "The task could not be found"
+  NOT_PARSABLE_ERR   = "Your request could not be parsed"
+  TASK_INVALID_ERR   = "Task validation failed: %s"
+
   class Result < Struct.new(:status, :body)
   end
 
   class << self
-
-    TASK_NOT_FOUND_ERR = "The task could not be found"
-    NOT_PARSABLE_ERR = "Your request could not be parsed"
-    TASK_INVALID_ERR = "Task validation failed: %s"
-
     def ok(msg)
       body = {
         "success_message" => msg,
-        "status"        => "OK"
+        "status"          => "OK"
       }
       Result.new(200, body)
     end

@@ -45,17 +45,10 @@ class TaskService
     end
   end
 
-  def try_delete(id)
-    task = @task_class[id]
-    if task
+  def try_delete(task_id)
+    with_task(task_id) do |task|
       delete(task)
-    else
-      TaskPresenter.fail_task_not_found
     end
-  end
-
-  def getAll
-    @task_class.all
   end
 
   private

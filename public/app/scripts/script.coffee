@@ -74,11 +74,15 @@ stldAppModule
                     console.log(data, status, headers, config)
                 )
 
-        $scope.deleteUniqueTask = (task) ->
-            $http.delete("unique-task/#{task.id}")
+        $scope.deleteUniqueTask    = (task) -> $scope.deleteTask("unique", task)
+        $scope.deleteRecurringTask = (task) -> $scope.deleteTask("recurring", task)
+
+        $scope.deleteTask = (type, task) ->
+            $http.delete("#{type}-task/#{task.id}")
                 .success( (data, status, headers, config) ->
-                    i = $scope.uniqueTasks.indexOf(task)
-                    $scope.uniqueTasks.splice(i, 1)
+                    tasks = if type == "unique" then $scope.uniqueTasks else $scope.recurringTasks
+                    i = tasks.indexOf(task)
+                    tasks.splice(i, 1)
                 )
                 .error ( (data, status, headers, config) ->
                     console.log(data, status, headers, config)

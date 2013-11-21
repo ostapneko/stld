@@ -59,15 +59,15 @@ get '/tasks' do
   }.to_json
 end
 
-post '/recurring_task' do
+post '/recurring-task' do
   create_task(RecurringTask)
 end
 
-post '/unique_task' do
+post '/unique-task' do
   create_task(UniqueTask)
 end
 
-delete '/recurring_task/:id' do
+delete '/recurring-task/:id' do
   delete_task(RecurringTask)
 end
 
@@ -83,7 +83,7 @@ put '/unique-task/:id' do
   update_task(UniqueTask)
 end
 
-post '/start_new_sprint' do
+post '/start-new-sprint' do
   flash[:errors], flash[:notice] = SprintService.new.start_new_sprint
   redirect to('/')
 end

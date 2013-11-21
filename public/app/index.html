@@ -76,7 +76,7 @@
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-success"><i class="fa fa-check"></i> Done</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-default">{{ task.displayAction() }}</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-info" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
           </tbody>
         </table>
