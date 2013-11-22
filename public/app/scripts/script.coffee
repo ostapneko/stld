@@ -14,7 +14,13 @@ stldAppModule
             constructor: (@id, @description, @active, @mode, @tempDescription) ->
 
             displayAction: ->
-              if @active then "Postpone" else "To Sprint"
+                if @active then "Postpone" else "To Sprint"
+
+            update: (params) ->
+                @description     = params.description
+                @active          = params.active
+                @tempDescription = params.description
+                @mode            = 'show'
 
         class RecurringTask extends Task
             constructor: (@id, @description, @active, @enabled, @mode, @tempDescription) ->
@@ -64,15 +70,24 @@ stldAppModule
                 id: task.id
                 description: task.tempDescription
                 active: task.active
+            $scope.try_update(task, payload)
 
+        $scope.toggleActivity = (task) ->
+            payload =
+                id: task.id
+                description: task.description
+                active: !task.active
+            $scope.try_update(task, payload)
+
+        $scope.try_update = (task, payload) ->
             $http.put("/unique-task/#{task.id}", payload)
                 .success( (data, status, headers, config) ->
-                    task.description = task.tempDescription
-                    task.mode = 'show'
+                    task.update(payload)
                 )
                 .error ( (data, status, headers, config) ->
                     console.log(data, status, headers, config)
                 )
+
 
         $scope.deleteUniqueTask    = (task) -> $scope.deleteTask("unique", task)
         $scope.deleteRecurringTask = (task) -> $scope.deleteTask("recurring", task)
