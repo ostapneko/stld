@@ -22,8 +22,12 @@ include ERB::Util
 helpers do
   def create_task(task_class)
     service = TaskService.build(task_class)
-    flash[:errors], flash[:notice] = service.try_create(params)
-    redirect to('/tasks')
+    payload = request.body.read
+    result = service.try_create(payload)
+
+    content_type :json
+    status       result.status
+    body         result.body.to_json
   end
 
   def delete_task(task_class)

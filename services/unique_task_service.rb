@@ -7,13 +7,12 @@ class UniqueTaskService < TaskService
 
   def get_tasks
     UniqueTask.all.map do |t|
-      active = t.status == "todo"
-      UniqueTaskPresenter.new(t, active).serialize
+      UniqueTaskPresenter.new(t).serialize
     end
   end
 
   def add_params(common_params, params)
-    status = params["todo"] ? "todo" : "not_started"
+    status = params["active"] ? "todo" : "not_started"
     common_params.merge({
       status: status
     })

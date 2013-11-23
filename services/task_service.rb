@@ -4,15 +4,14 @@ require_relative '../models/unique_task'
 require_relative '../presenters/task_presenter'
 
 class TaskService
-  
   def initialize
     raise "Abstract class, instantiate child classes instead"
   end
 
   def self.build(task_class)
-    case task_class.to_s
-    when "UniqueTask"; UniqueTaskService.new
-    when "RecurringTask"; RecurringTaskService.new
+    case task_class
+    when UniqueTask; UniqueTaskService.new
+    when RecurringTask; RecurringTaskService.new
     else raise "Cannot build task service for #{task_class}"
     end
   end
@@ -71,8 +70,9 @@ class TaskService
   end
 
   def create(task)
+    presenter = TaskPresenter.build_from_task(task)
     task.save
-    TaskPresenter.ok('Task created!')
+    TaskPresenter.task_created(presenter)
   end
 
   def update(task)

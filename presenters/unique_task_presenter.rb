@@ -1,8 +1,8 @@
 class UniqueTaskPresenter
-  def initialize(task, active)
+  def initialize(task)
     @id          = task.id
     @description = task.description
-    @active      = active
+    @active      = t.status == "todo"
   end
 
   def serialize

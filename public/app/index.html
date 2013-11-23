@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html ng-app="stldApp">
   <head>
     <link href="/styles/vendor/bootstrap.no-icons.min.css" rel="stylesheet">
@@ -8,6 +9,9 @@
   </head>
 
   <body class="container" ng-controller="TaskCtrl">
+
+<!--HEADER ------------------------------------------------ -->
+
     <header class="navbar-fixed-top navbar">
       <nav class="navbar navbar-default" role="navigation">
         <div class="container">
@@ -15,12 +19,14 @@
             <a class="navbar-brand" href="/">STLD!</a>
           </div>
             <ul class="nav navbar-nav">
-              <li ng-class="{active: taskFilter == 'thisWeek'}"><a href="#" ng-click="setFilter('thisWeek')">This week</a></li>
-              <li ng-class="{active: taskFilter == 'backlog'}"><a href="#" ng-click="setFilter('backlog')">Backlog</a></li>
+              <li ng-class="{active: taskFilter == 'thisWeek'}"><a href="#" ng-click="setFilter('thisWeek')">this week</a></li>
+              <li ng-class="{active: taskFilter == 'backlog'}"><a href="#" ng-click="setFilter('backlog')">backlog</a></li>
             </ul>
         </div>
       </nav>
     </header>
+
+<!--UNIQUE TASKS ------------------------------------------------ -->
 
     <div id="unique-tasks">
       <div class="panel panel-default">
@@ -34,7 +40,7 @@
               <td ng-show="task.mode == 'edit'">
                 <form role="form" ng-submit="updateUniqueTaskDescription(task)">
                   <div class="input-group">
-                    <input type="text" class="form-control" ng-model="task.tempDescription">
+                    <input type="text" class="form-control" name="description" ng-model="task.tempDescription">
                     <span class="input-group-btn">
                       <button type="submit" class="btn btn-default">OK</button>
                       <button type="button" class="btn btn-default" ng-click="task.cancelEdit()">Cancel</button>
@@ -52,8 +58,22 @@
           </tbody>
         </table>
       </div>
-      <button class="btn btn-default"><i class="fa fa-plus"></i> Create</button>
+
+      <!-- CREATE UNIQUE TASK-->
+
+      <button class="btn btn-default" ng-click="toggleCreateMode(true)"><i class="fa fa-plus"></i> Create</button>
+      <form role="form" ng-show="createMode == true" ng-submit="createUniqueTask(newTaskDescription)">
+        <div class="input-group">
+          <input type="text" class="form-control" ng-model="newTaskDescription">
+          <span class="input-group-btn">
+             <button type="submit" class="btn btn-default">OK</button>
+             <button type="button" class="btn btn-default" ng-click="toggleCreateMode(false)">Cancel</button>
+          </span>
+        </div>
+      </form>
     </div>
+
+<!--RECURRING TASKS ------------------------------------------------ -->
 
     <div id="recurring-tasks">
       <div class="panel panel-default">
@@ -81,9 +101,15 @@
           </tbody>
         </table>
       </div>
-      <button class="btn btn-default"><i class="fa fa-plus"></i> Create</button>
+
+      <!-- CREATE RECURRING TASK-->
+
+      <button class="btn btn-default" ng-click="toggleCreateMode(true)"><i class="fa fa-plus"></i> Create</button>
     </div>
+
+<!-- SCRIPTS ---------------------------------------------------- -->
     <script src="/scripts/vendor/angular.min.js"></script>
     <script src="/scripts/script.js"></script>
+    <script src="/scripts/filters/expandClassFilter.js"></script>
   </body>
 </html>

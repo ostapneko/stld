@@ -1,4 +1,4 @@
-stldAppModule = angular.module('stldApp', [])
+stldAppModule = angular.module('stldApp', ['stldApp.filter'])
 
 stldAppModule
     .controller('TaskCtrl', ['$scope', '$http', ($scope, $http) ->
@@ -28,22 +28,23 @@ stldAppModule
             displayAction: ->
               if @enabled then "Disable" else "Enable"
 
-        $scope.uniqueTasks    = []
-        $scope.recurringTasks = []
-        $scope.taskFilter     = { active: true }
-        $scope.tasksDisplayed = { unique: true, recurring: true }
-        $scope.taskFilter     = "thisWeek"
+        $scope.uniqueTasks        = []
+        $scope.recurringTasks     = []
+        $scope.tasksDisplayed     = { unique: true, recurring: true }
+        $scope.taskFilter         = "thisWeek"
+        $scope.createMode         = false
+        $scope.newTaskDescription = ""
 
         $scope.getTasks = ->
             $http.get('/tasks')
-                .success( (data, status, headers, config) ->
+                .success( (body, status, headers, config) ->
                     $scope.uniqueTasks = (new UniqueTask(
                         t.id,
                         t.description,
                         t.active,
                         'show',
                         t.description
-                    ) for t in data["uniqueTasks"])
+                    ) for t in body["uniqueTasks"])
 
                     $scope.recurringTasks = (new RecurringTask(
                         t.id,
@@ -52,7 +53,7 @@ stldAppModule
                         t.enabled,
                         'show',
                         t.description
-                    ) for t in data["recurringTasks"])
+                    ) for t in body["recurringTasks"])
                 )
 
         $scope.setFilter = (f) ->
@@ -64,6 +65,32 @@ stldAppModule
 
         $scope.toggleDisplay = (prop) ->
             $scope.tasksDisplayed[prop] = !$scope.tasksDisplayed[prop]
+
+        $scope.toggleCreateMode = (bool) ->
+            $scope.createMode = bool
+
+        $scope.createUniqueTask = (description) ->
+            payload =
+                description: description
+                active: $scope.setStatus($scope.taskFilter)
+            $scope.try_create(payload)
+
+        $scope.try_create = (payload) ->
+            $http.post("/unique-task", payload)
+                .success( (body, status, headers, config) ->
+                    task = body.task
+                    newTask = new UniqueTask(
+                        task.id, task.description, task.active, 'show', task.description)
+                    $scope.createMode = false
+                    $scope.uniqueTasks.push(newTask)
+                    $scope.newTaskDescription = ""
+                )
+                .error( (body, status, headers, config) ->
+                    console.log(body, status, headers, config)
+                )
+
+        $scope.setStatus = (filter) ->
+            filter == "thisWeek"
 
         $scope.updateUniqueTaskDescription = (task) ->
             payload =
@@ -81,31 +108,26 @@ stldAppModule
 
         $scope.try_update = (task, payload) ->
             $http.put("/unique-task/#{task.id}", payload)
-                .success( (data, status, headers, config) ->
+                .success( (body, status, headers, config) ->
                     task.update(payload)
                 )
-                .error ( (data, status, headers, config) ->
-                    console.log(data, status, headers, config)
+                .error ( (body, status, headers, config) ->
+                    console.log(body, status, headers, config)
                 )
-
 
         $scope.deleteUniqueTask    = (task) -> $scope.deleteTask("unique", task)
         $scope.deleteRecurringTask = (task) -> $scope.deleteTask("recurring", task)
 
         $scope.deleteTask = (type, task) ->
             $http.delete("#{type}-task/#{task.id}")
-                .success( (data, status, headers, config) ->
+                .success( (body, status, headers, config) ->
                     tasks = if type == "unique" then $scope.uniqueTasks else $scope.recurringTasks
                     i = tasks.indexOf(task)
                     tasks.splice(i, 1)
                 )
-                .error ( (data, status, headers, config) ->
-                    console.log(data, status, headers, config)
+                .error ( (body, status, headers, config) ->
+                    console.log(body, status, headers, config)
                 )
 
         $scope.getTasks()
     ])
-    .filter('expandClass', ->
-        (tDisplayed, taskType) ->
-            if tDisplayed[taskType] then "fa-caret-down" else "fa-caret-right"
-    )

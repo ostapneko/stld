@@ -2,6 +2,14 @@ body {
   margin-top: 100px;
 }
 
+h3, nav {
+  font-variant: small-caps;
+}
+
+nav {
+  font-weight: 600;
+}
+
 a:focus {
   outline: 0;
 }
