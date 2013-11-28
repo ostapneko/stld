@@ -9,9 +9,9 @@ class TaskService
   end
 
   def self.build(task_class)
-    case task_class
-    when UniqueTask; UniqueTaskService.new
-    when RecurringTask; RecurringTaskService.new
+    case task_class.to_s
+    when "UniqueTask"; UniqueTaskService.new
+    when "RecurringTask"; RecurringTaskService.new
     else raise "Cannot build task service for #{task_class}"
     end
   end

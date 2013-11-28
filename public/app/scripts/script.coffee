@@ -1,7 +1,7 @@
-stldAppModule = angular.module('stldApp', ['stldApp.filter'])
+stldAppModule = angular.module('stldApp', ['stldApp.filter', 'taskServiceModule'])
 
 stldAppModule
-    .controller('TaskCtrl', ['$scope', '$http', ($scope, $http) ->
+    .controller('TaskCtrl', ['$scope', '$http', 'taskService', ($scope, $http, taskService) ->
         class Task
             cancelEdit: ->
                 @mode = 'show'
@@ -36,46 +36,40 @@ stldAppModule
         $scope.newTaskDescription = ""
 
         $scope.getTasks = ->
-            $http.get('/tasks')
-                .success( (body, status, headers, config) ->
-                    $scope.uniqueTasks = (new UniqueTask(
-                        t.id,
-                        t.description,
-                        t.active,
-                        'show',
-                        t.description
-                    ) for t in body["uniqueTasks"])
+            onSuccess = (body, status, headers, config) ->
+                $scope.uniqueTasks = (new UniqueTask(
+                    t.id,
+                    t.description,
+                    t.active,
+                    'show',
+                    t.description
+                ) for t in body["uniqueTasks"])
+                $scope.recurringTasks = (new RecurringTask(
+                    t.id,
+                    t.description,
+                    t.active,
+                    t.enabled,
+                    'show',
+                    t.description
+                ) for t in body["recurringTasks"])
 
-                    $scope.recurringTasks = (new RecurringTask(
-                        t.id,
-                        t.description,
-                        t.active,
-                        t.enabled,
-                        'show',
-                        t.description
-                    ) for t in body["recurringTasks"])
-                )
+            onFailure = (body, status, headers, config) -> console.log(body, status)
 
-        $scope.setFilter = (f) ->
-            $scope.tasksDisplayed = { unique: true, recurring: true }
-            $scope.taskFilter = f
-
-        $scope.filterTask = ->
-            { active: $scope.taskFilter == "thisWeek" }
-
-        $scope.toggleDisplay = (prop) ->
-            $scope.tasksDisplayed[prop] = !$scope.tasksDisplayed[prop]
-
-        $scope.toggleCreateMode = (bool) ->
-            $scope.createMode = bool
+            taskService.askForGet(onSuccess, onFailure)
 
         $scope.createUniqueTask = (description) ->
             payload =
                 description: description
                 active: $scope.setStatus($scope.taskFilter)
-            $scope.try_create(payload)
+            $scope.try_create_unique(payload)
 
-        $scope.try_create = (payload) ->
+        $scope.createRecurringTask = (description) ->
+            payload =
+                description: description
+                active: $scope.setStatus($scope.taskFilter)
+            $scope.try_create_recurring(payload)
+
+        $scope.try_create_unique = (payload) ->
             $http.post("/unique-task", payload)
                 .success( (body, status, headers, config) ->
                     task = body.task
@@ -107,27 +101,35 @@ stldAppModule
             $scope.try_update(task, payload)
 
         $scope.try_update = (task, payload) ->
-            $http.put("/unique-task/#{task.id}", payload)
-                .success( (body, status, headers, config) ->
-                    task.update(payload)
-                )
-                .error ( (body, status, headers, config) ->
-                    console.log(body, status, headers, config)
-                )
+            onSuccess = (body, status, headers, config) -> task.update(payload)
+            onFailure = (body, status, headers, config) -> console.log(body, status)
+
+            taskService.askForUpdate(task, payload, onSuccess, onFailure)
 
         $scope.deleteUniqueTask    = (task) -> $scope.deleteTask("unique", task)
         $scope.deleteRecurringTask = (task) -> $scope.deleteTask("recurring", task)
 
         $scope.deleteTask = (type, task) ->
-            $http.delete("#{type}-task/#{task.id}")
-                .success( (body, status, headers, config) ->
-                    tasks = if type == "unique" then $scope.uniqueTasks else $scope.recurringTasks
-                    i = tasks.indexOf(task)
-                    tasks.splice(i, 1)
-                )
-                .error ( (body, status, headers, config) ->
-                    console.log(body, status, headers, config)
-                )
+            onSuccess = (body, status, headers, config) ->
+                tasks = if type == "unique" then $scope.uniqueTasks else $scope.recurringTasks
+                i = tasks.indexOf(task)
+                tasks.splice(i, 1)
+            onFailure = (body, status, headers, config) -> console.log(body, status)
+
+            taskService.askForDelete(type, task, onSuccess, onFailure)
+
+        $scope.setFilter = (f) ->
+            $scope.tasksDisplayed = { unique: true, recurring: true }
+            $scope.taskFilter = f
+
+        $scope.filterTask = ->
+            { active: $scope.taskFilter == "thisWeek" }
+
+        $scope.toggleDisplay = (prop) ->
+            $scope.tasksDisplayed[prop] = !$scope.tasksDisplayed[prop]
+
+        $scope.toggleCreateMode = (bool) ->
+            $scope.createMode = bool
 
         $scope.getTasks()
     ])

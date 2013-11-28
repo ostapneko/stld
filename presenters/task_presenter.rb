@@ -3,7 +3,7 @@ class TaskPresenter
   NOT_PARSABLE_ERR   = "Your request could not be parsed"
   TASK_INVALID_ERR   = "Task validation failed: %s"
 
-  TASK_CREATED_MSG   = "Task created"
+  TASK_CREATED_MSG   = "Task created!"
 
   class Result < Struct.new(:status, :body)
   end
