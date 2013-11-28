@@ -9,8 +9,7 @@ class RecurringTaskService < TaskService
 
   def get_tasks
     RecurringTask.all.map do |t|
-      active = t.enabled && t.status == "todo"
-      RecurringTaskPresenter.new(t, active).serialize
+      RecurringTaskPresenter.new(t).serialize
     end
   end
 

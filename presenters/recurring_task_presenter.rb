@@ -1,8 +1,8 @@
 class RecurringTaskPresenter
-  def initialize(task, active)
+  def initialize(task)
     @id          = task.id
     @description = task.description
-    @active      = active
+    @active      = task.enabled && task.status == "todo"
     @enabled     = task.enabled
   end
 
