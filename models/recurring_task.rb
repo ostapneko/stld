@@ -14,19 +14,6 @@ class RecurringTask < Sequel::Model
     validates_includes %w(todo done skip), :status
   end
 
-  def self.enabled
-    where(enabled: true)
-  end
-
-  def self.active
-    enabled.where(status: ["todo"])
-  end
-
-  def self.shown_in_task_list
-    order(:id)
-  end
-
-
   def due_this_week?
     due_for_week?(current_year, current_week)
   end

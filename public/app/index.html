@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html ng-app="stldApp">
+  <head>
+    <link href="/styles/vendor/bootstrap.no-icons.min.css" rel="stylesheet">
+    <link href="/styles/vendor/font-awesome/font-awesome.min.css" rel="stylesheet">
+    <link href="/styles/application.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+
+  <body class="container" ng-controller="TaskCtrl">
+
+<!--HEADER ------------------------------------------------ -->
+
+    <header class="navbar-fixed-top navbar">
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/">STLD!</a>
+          </div>
+            <ul class="nav navbar-nav">
+              <li ng-class="{active: taskFilter == 'thisWeek'}"><a href="#" ng-click="setFilter('thisWeek')">this week</a></li>
+              <li ng-class="{active: taskFilter == 'backlog'}"><a href="#" ng-click="setFilter('backlog')">backlog</a></li>
+            </ul>
+        </div>
+      </nav>
+    </header>
+
+<!--UNIQUE TASKS ------------------------------------------------ -->
+
+    <div id="unique-tasks">
+      <div class="panel panel-default">
+        <div class="panel-heading task-heading">
+          <h3>Unique tasks <a href="#" ng-click="toggleDisplay('unique')"><i class="btn-expand fa" ng-class="tasksDisplayed | expandClass:'unique'"></i></a></h3>
+        </div>
+        <table class="table tasks table-hover" ng-show="tasksDisplayed.unique">
+          <tbody>
+            <tr ng-repeat="task in uniqueTasks | filter: filterTask()">
+              <td ng-show="task.mode == 'show'">{{ task.description }}</td>
+              <td ng-show="task.mode == 'edit'">
+                <form role="form" ng-submit="updateUniqueTaskDescription(task)">
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="description" ng-model="task.tempDescription">
+                    <span class="input-group-btn">
+                      <button type="submit" class="btn btn-default">OK</button>
+                      <button type="button" class="btn btn-default" ng-click="task.cancelEdit()">Cancel</button>
+                    </span>
+                  </div>
+                </form>
+              </td>
+              <td class="task-btn"><button type="button" class="btn btn-success" ng-click="deleteUniqueTask(task)" ng-show="task.mode == 'show'"><i class="fa fa-check"></i> Done</button></td>
+              <td class="task-btn"><button type="button" class="btn btn-default" ng-show="task.mode == 'show'" ng-click="toggleActivity(task)">{{ task.displayAction() }}</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-info" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
+              <td class="task-btn"><button type="button" class="btn btn-danger" ng-show="task.mode == 'show'" ng-click="deleteUniqueTask(task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
+            </tr>
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CREATE UNIQUE TASK-->
+
+      <button class="btn btn-default" ng-click="toggleCreateMode(true)"><i class="fa fa-plus"></i> Create</button>
+      <form role="form" ng-show="createMode == true" ng-submit="createUniqueTask(newTaskDescription)">
+        <div class="input-group">
+          <input type="text" class="form-control" ng-model="newTaskDescription">
+          <span class="input-group-btn">
+             <button type="submit" class="btn btn-default">OK</button>
+             <button type="button" class="btn btn-default" ng-click="toggleCreateMode(false)">Cancel</button>
+          </span>
+        </div>
+      </form>
+    </div>
+
+<!--RECURRING TASKS ------------------------------------------------ -->
+
+    <div id="recurring-tasks">
+      <div class="panel panel-default">
+        <div class="panel-heading task-heading"><h3>Recurring tasks <a href="#" ng-click="toggleDisplay('recurring')"><i class="btn-expand fa" ng-class="tasksDisplayed | expandClass:'recurring'"></i></a></h3></div>
+        <table class="table tasks table-hover" ng-show="tasksDisplayed.recurring">
+          <tbody>
+            <tr ng-repeat="task in recurringTasks | filter: filterTask()">
+              <td ng-show="task.mode == 'show'">{{ task.description }}</td>
+              <td ng-show="task.mode == 'edit'">
+                <form role="form" ng-submit="updateDescription()">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ng-model="task.tempDescription">
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default">OK</button>
+                      <button type="button" class="btn btn-default" ng-click="task.cancelEdit()">Cancel</button>
+                    </span>
+                  </div>
+                </form>
+              </td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-success"><i class="fa fa-check"></i> Done</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-default">{{ task.displayAction() }}</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-info" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CREATE RECURRING TASK-->
+
+      <button class="btn btn-default" ng-click="toggleCreateMode(true)"><i class="fa fa-plus"></i> Create</button>
+    </div>
+
+<!-- SCRIPTS ---------------------------------------------------- -->
+    <script src="/scripts/vendor/angular.min.js"></script>
+    <script src="/scripts/script.js"></script>
+    <script src="/scripts/filters/expandClassFilter.js"></script>
+  </body>
+</html>

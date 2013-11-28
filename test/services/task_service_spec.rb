@@ -1,29 +1,36 @@
 require_relative '../test_helper'
 require_relative '../../lib/date_helpers'
 require_relative '../../services/task_service'
+require_relative '../../services/unique_task_service'
+require_relative '../../services/recurring_task_service'
 
 describe TaskService do
   before do
-    @recurring_task_service = TaskService.new(RecurringTask)
-    @unique_task_service = TaskService.new(UniqueTask)
+    @recurring_task_service = TaskService.build(RecurringTask)
+    @unique_task_service = TaskService.build(UniqueTask)
   end
 
   describe '#try_create' do
     before do
       DB[:recurring_tasks].delete
       DB[:unique_tasks].delete
-    end
 
-    describe 'when the creations params are valid' do
-      before do
-        params = {
+      @params = {
           "description" => "description",
           "frequency"   => 1,
           "status"      => "todo",
           "enabled"     => true,
           "misc_param"  => "foo"
-        }
-        @errors, @msg = @recurring_task_service.try_create(params)
+        }.to_json
+
+      @invalid_params = { invalid_params: true }.to_json
+    end
+
+    describe 'when the creation params are valid' do
+      before do
+        @result = @recurring_task_service.try_create(@params)
+        @status = @result.status
+        @body = @result.body
       end
 
       it "persists a record in the task database" do
@@ -31,11 +38,11 @@ describe TaskService do
       end
 
       it "returns no errors" do
-        @errors.must_be_empty
+        @body["error_message"].must_be_nil
       end
 
       it "returns a success message" do
-        @msg.must_equal "Task created!"
+        @body["success_message"].must_equal "Task created!"
       end
 
       it "remembers the week and year the task was started" do
@@ -48,7 +55,7 @@ describe TaskService do
           @unique_task_service.try_create({
             "description" => "description",
             "status"      => "todo"
-          })
+          }.to_json)
 
           DB[:unique_tasks].count.must_equal 1
         end
@@ -57,8 +64,9 @@ describe TaskService do
 
     describe 'when the creations params are invalid' do
       before do
-        params = { invalid_params: true }
-        @errors, @msg = @recurring_task_service.try_create(params)
+        @result = @recurring_task_service.try_create(@invalid_params)
+        @status = @result.status
+        @body = @result.body
       end
 
       it "doesn't persist the record" do
@@ -66,11 +74,11 @@ describe TaskService do
       end
 
       it "returns errors" do
-        @errors.wont_be_empty
+        @body["error_message"].wont_be_empty
       end
 
       it "returns a nil success message" do
-        @msg.must_be_nil
+        @body["success_message"].must_be_nil
       end
     end
   end
@@ -89,7 +97,9 @@ describe TaskService do
 
         id = UniqueTask.first.id
 
-        @errors, @msg = @unique_task_service.try_delete(id)
+        @result = @unique_task_service.try_delete(id)
+        @status = @result.status
+        @body = @result.body
       end
 
       it "deletes the record" do
@@ -97,90 +107,27 @@ describe TaskService do
       end
 
       it "returns no errors object" do
-        @errors.must_be_empty
+        @status.must_equal(200)
       end
 
       it "returns a success message" do
-        @msg.must_equal "Task deleted!"
+        @body["success_message"].must_equal "Task deleted!"
       end
     end
 
     describe "when the task does not exist" do
       before do
-        @errors, @msg = @unique_task_service.try_delete(1)
+        @result = @unique_task_service.try_delete(1)
+        @status = @result.status
+        @body = @result.body
       end
 
       it "returns an error with a 'task not found' full_messages'" do
-        @errors.must_equal ['The task to delete could not be found']
+        @body["error_message"].must_equal 'The task could not be found'
       end
 
       it "returns a nil success message" do
-        @msg.must_be_nil
-      end
-    end
-  end
-
-  describe '#try_update' do
-    before do
-      DB[:unique_tasks].delete
-
-      UniqueTask.create({
-        description: "desc",
-        status:      "todo"
-      })
-
-      @params = {
-        "id"          => 1,
-        "description" => "desc2",
-        "misc_params" => "foo"
-      }
-
-      @id = UniqueTask.first.id
-    end
-
-    describe 'when the task does not exist' do
-      before do
-        @errors, @msg = @unique_task_service.try_update(@id + 1, @params)
-      end
-
-      it "returns an error with a 'task not found' full_messages'" do
-        @errors.must_equal ['The task to delete could not be found']
-      end
-
-      it "returns a nil success message" do
-        @msg.must_be_nil
-      end
-    end
-
-    describe 'when the new values are valid' do
-      before do
-        @errors, @msg = @unique_task_service.try_update(@id, @params)
-      end
-
-      it "updates the record" do
-        UniqueTask[@id].description.must_equal "desc2"
-      end
-
-      it "returns no errors object" do
-        @errors.must_be_empty
-      end
-
-      it "returns a success message" do
-        @msg.must_equal "Task updated!"
-      end
-    end
-
-    describe 'when the new values are invalid' do
-      before do
-        @errors, @msg = @unique_task_service.try_update(@id, { "description" => nil })
-      end
-
-      it "returns errors" do
-        @errors.wont_be_empty
-      end
-
-      it "returns a nil success message" do
-        @msg.must_be_nil
+        @body["success_message"].must_be_nil
       end
     end
   end

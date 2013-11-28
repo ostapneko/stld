@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 ENV['RACK_ENV'] = "test"
 if ARGV[0] == 'features'
   test_dir = File.expand_path File.join(File.dirname(__FILE__), "..", "test/integration")

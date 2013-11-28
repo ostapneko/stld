@@ -1,51 +1,52 @@
 require_relative '../config/connection'
 require_relative '../models/recurring_task'
 require_relative '../models/unique_task'
-require_relative '../lib/date_helpers'
-
-require 'ostruct'
+require_relative '../presenters/task_presenter'
 
 class TaskService
-  include DateHelpers
-
-  TASK_CREATED_MSG = "Task created!"
-  TASK_UPDATED_MSG = "Task updated!"
-  TASK_DELETED_MSG = "Task deleted!"
-  TASK_NOT_FOUND_ERR = "The task to delete could not be found"
-
-  def initialize(task_class)
-    @task_class = task_class
+  def initialize
+    raise "Abstract class, instantiate child classes instead"
   end
 
-  def try_create(params)
-    task = make(params)
-    if task.valid?
-      save(task)
-    else
-      return [task.errors.full_messages, nil]
+  def self.build(task_class)
+    case task_class
+    when UniqueTask; UniqueTaskService.new
+    when RecurringTask; RecurringTaskService.new
+    else raise "Cannot build task service for #{task_class}"
     end
   end
 
-  def try_delete(id)
-    task = @task_class[id]
-    if task
+  def with_task(task_id, &block)
+    task = @task_class[task_id]
+    return TaskPresenter.fail_task_not_found unless task
+    yield task
+  end
+
+  def with_params(payload, &block)
+    params =
+      begin
+        JSON.parse payload
+      rescue
+        return TaskPresenter.fail_non_parsable_payload
+      end
+    yield params
+  end
+
+  def try_create(payload)
+    with_params(payload) do |params|
+      task = make(params)
+
+      if task.valid?
+        create(task)
+      else
+        TaskPresenter.fail_task_invalid(task)
+      end
+    end
+  end
+
+  def try_delete(task_id)
+    with_task(task_id) do |task|
       delete(task)
-    else
-      fail_task_not_found
-    end
-  end
-
-  def try_update(id, params)
-    task = @task_class[id]
-    return fail_task_not_found unless task
-    updated_keys = (task.keys.map(&:to_s) & params.keys) - ["id"]
-    updated_keys.each do |k|
-      task.set(k.to_sym => params[k])
-    end
-    if task.valid?
-      update(task)
-    else
-      return [task.errors.full_messages, nil]
     end
   end
 
@@ -60,48 +61,22 @@ class TaskService
     common_params = {
       description: params["description"].to_s
     }
-
-    if @task_class == RecurringTask
-      add_recurring_params(common_params, params)
-    else
-      add_unique_params(common_params, params)
-    end
+    add_params(common_params, params)
   end
 
   def delete(task)
     task.delete
-    [[], TASK_DELETED_MSG]
+    TaskPresenter.ok('Task deleted!')
   end
 
-  def fail_task_not_found
-    errors = [TASK_NOT_FOUND_ERR]
-    [errors, nil]
-  end
-
-  def save(task)
+  def create(task)
+    presenter = TaskPresenter.build_from_task(task)
     task.save
-    [[], TASK_CREATED_MSG]
+    TaskPresenter.task_created(presenter)
   end
 
   def update(task)
     task.save
-    [[], TASK_UPDATED_MSG]
-  end
-
-  def add_recurring_params(common_params, params)
-    common_params.merge({
-      frequency: params["frequency"] && params["frequency"].to_i,
-      status:    "todo",
-      enabled:   !!params["enabled"],
-      started_at_week: current_week,
-      started_at_year: current_year
-    })
-  end
-
-  def add_unique_params(common_params, params)
-    status = params["todo"] ? "todo" : "not_started"
-    common_params.merge({
-      status: status
-    })
+    TaskPresenter.ok('Task updated!')
   end
 end
