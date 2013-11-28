@@ -70,8 +70,8 @@ class TaskService
   end
 
   def create(task)
-    presenter = TaskPresenter.build_from_task(task)
     task.save
+    presenter = TaskPresenter.build_from_task(task)
     TaskPresenter.task_created(presenter)
   end
 
