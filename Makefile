@@ -56,3 +56,7 @@ $(SCRIPTS_VENDOR_DIR):
 
 scripts:
 	coffee -c $(SCRIPTS_DIR)
+
+.PHONY: test
+test:
+	bundle exec script/test.rb
