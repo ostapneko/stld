@@ -29,3 +29,7 @@ table.tasks.table > tbody > tr > td {
 .btn-expand {
   color: black;
 }
+
+.input-group-addon{
+  padding: 0px 12px;
+}
