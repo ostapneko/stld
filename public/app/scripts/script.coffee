@@ -32,7 +32,8 @@ stldAppModule
         $scope.recurringTasks     = []
         $scope.tasksDisplayed     = { unique: true, recurring: true }
         $scope.taskFilter         = "thisWeek"
-        $scope.createMode         = false
+        $scope.createUniqueMode         = false
+        $scope.createRecurringMode      = false
         $scope.newTaskDescription = ""
 
         $scope.getTasks = ->
@@ -63,10 +64,12 @@ stldAppModule
                 active: $scope.setStatus($scope.taskFilter)
             $scope.try_create_unique(payload)
 
-        $scope.createRecurringTask = (description) ->
+        $scope.createRecurringTask = (descriptioni, frequency) ->
             payload =
                 description: description
                 active: $scope.setStatus($scope.taskFilter)
+                frequency: frequency
+                enabled: enabled
             $scope.try_create_recurring(payload)
 
         $scope.try_create_unique = (payload) ->
@@ -75,8 +78,22 @@ stldAppModule
                     task = body.task
                     newTask = new UniqueTask(
                         task.id, task.description, task.active, 'show', task.description)
-                    $scope.createMode = false
+                    $scope.createUniqueMode = false
                     $scope.uniqueTasks.push(newTask)
+                    $scope.newTaskDescription = ""
+                )
+                .error( (body, status, headers, config) ->
+                    console.log(body, status, headers, config)
+                )
+
+        $scope.try_create_recurring = (payload) ->
+            $http.post("/recurring-task", payload)
+                .success( (body, status, headers, config) ->
+                    task = body.task
+                    newTask = new RecurringTask(
+                        task.id, task.description, task.active, task.enabled, 'show', task.description)
+                    $scope.createRecurringMode = false
+                    $scope.RecurringTasks.push(newTask)
                     $scope.newTaskDescription = ""
                 )
                 .error( (body, status, headers, config) ->
@@ -128,8 +145,12 @@ stldAppModule
         $scope.toggleDisplay = (prop) ->
             $scope.tasksDisplayed[prop] = !$scope.tasksDisplayed[prop]
 
-        $scope.toggleCreateMode = (bool) ->
-            $scope.createMode = bool
+        $scope.toggleCreateMode = (bool, taskType) ->
+            if taskType == 'unique'
+                $scope.createUniqueMode = bool
+            else
+                $scope.createRecurringMode = bool
+
 
         $scope.getTasks()
     ])
