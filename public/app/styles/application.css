@@ -1,17 +1,47 @@
 body {
   margin-top: 100px;
-}
-
-h3, nav {
-  font-variant: small-caps;
+  background-color: rgb(245, 245, 245);
 }
 
 nav {
+  font-variant: small-caps;
+}
+
+h3 {
   font-weight: 600;
 }
 
-a:focus {
-  outline: 0;
+.navbar-default .navbar-nav > li > a{
+  color: silver;
+}
+
+.navbar .navbar-brand:hover {
+  color: inherit;
+}
+
+.navbar .navbar-default,
+.navbar .navbar-brand,
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .active > a:hover {
+  background-color: rgb(56, 64, 71);
+  color: white;
+}
+
+.navbar-default .navbar-nav > li > a:active,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a:hover {
+  font-weight: 600;
+  color: inherit;
+}
+
+#edit-btn {
+  background-color: #913B53;
+  border: none;
+}
+
+#edit-btn:hover {
+  background-color: #753043;
 }
 
 table.tasks.table > tbody > tr > td {
@@ -32,4 +62,10 @@ table.tasks.table > tbody > tr > td {
 
 .input-group-addon{
   padding: 0px 12px;
+}
+
+
+div.panel-heading.task-heading {
+  background-color: white;
+
 }
