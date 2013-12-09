@@ -26,9 +26,17 @@
       </nav>
     </header>
 
+<!--START NEW SPRINT --------------------- -->
+
+    <section>
+      <form action="/start_new_sprint", method="post">
+        <button class="btn btn-default btn-lg" id="start-sprint-btn">Start new sprint <i class="fa fa-angle-double-right"></i></button>
+      </form>
+    </section>
+
 <!--UNIQUE TASKS ------------------------------------------------ -->
 
-    <div id="unique-tasks">
+    <section id="unique-tasks">
       <div class="panel panel-default">
         <div class="panel-heading task-heading">
           <h3>Unique tasks <a href="#" ng-click="toggleDisplay('unique')"><i class="btn-expand fa" ng-class="tasksDisplayed | expandClass:'unique'"></i></a></h3>
@@ -71,11 +79,11 @@
           </span>
         </div>
       </form>
-    </div>
+    </section>
 
 <!--RECURRING TASKS ------------------------------------------------ -->
 
-    <div id="recurring-tasks">
+    <section id="recurring-tasks">
       <div class="panel panel-default">
         <div class="panel-heading task-heading"><h3>Recurring tasks <a href="#" ng-click="toggleDisplay('recurring')"><i class="btn-expand fa" ng-class="tasksDisplayed | expandClass:'recurring'"></i></a></h3></div>
         <table class="table tasks table-hover" ng-show="tasksDisplayed.recurring">
@@ -128,10 +136,10 @@
           </span>
         </div>
       </form>
+    </section>
 
-    </div>
 
-<!-- SCRIPTS ---------------------------------------------------- -->
+<!--SCRIPTS -->
     <script src="/scripts/vendor/angular.min.js"></script>
     <script src="/scripts/filters/stldAppFilters.js"></script>
     <script src="/scripts/services/taskService.js"></script>

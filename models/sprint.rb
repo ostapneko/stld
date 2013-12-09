@@ -1,6 +1,6 @@
-require_relative '../config/connection'
-require_relative '../lib/date_helpers'
-require_relative '../services/sprint_service'
+require 'config/connection'
+require 'lib/date_helpers'
+require 'services/sprint_service'
 
 class Sprint < Sequel::Model
   include DateHelpers

@@ -1,13 +1,10 @@
-require_relative '../config/connection'
-require_relative '../models/recurring_task'
-require_relative '../models/unique_task'
-require_relative '../presenters/task_presenter'
+require 'config/connection'
+require 'models/recurring_task'
+require 'models/unique_task'
+require 'presenters/task_presenter'
+require 'responses/response'
 
 class TaskService
-  def initialize
-    raise "Abstract class, instantiate child classes instead"
-  end
-
   def self.build(task_class)
     case task_class.to_s
     when "UniqueTask"; UniqueTaskService.new
@@ -48,6 +45,16 @@ class TaskService
     with_task(task_id) do |task|
       delete(task)
     end
+  end
+
+  def task_list_response
+    unique_tasks     = UniqueTaskService.new.get_tasks
+    recurring_tasks  = RecurringTaskService.new.get_tasks
+    body = {
+      "recurringTasks" => recurring_tasks,
+      "uniqueTasks"    => unique_tasks
+    }
+    Response.new(200, body)
   end
 
   private
