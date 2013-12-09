@@ -3,16 +3,18 @@ require 'sinatra/content_for'
 require 'rack-flash'
 require 'json'
 
-require_relative 'models/recurring_task'
-require_relative 'models/unique_task'
-require_relative 'models/sprint'
+$LOAD_PATH << File.dirname(__FILE__)
 
-require_relative 'services/task_service'
-require_relative 'services/unique_task_service'
-require_relative 'services/recurring_task_service'
+require 'models/recurring_task'
+require 'models/unique_task'
+require 'models/sprint'
 
-require_relative 'presenters/unique_task_presenter'
-require_relative 'presenters/recurring_task_presenter'
+require 'services/task_service'
+require 'services/unique_task_service'
+require 'services/recurring_task_service'
+
+require 'presenters/unique_task_presenter'
+require 'presenters/recurring_task_presenter'
 
 
 enable :sessions
@@ -20,14 +22,18 @@ use Rack::Flash
 include ERB::Util
 
 helpers do
+  def respond(result)
+    content_type :json
+    status       result.status
+    body         result.body.to_json
+  end
+
   def create_task(task_class)
     service = TaskService.build(task_class)
     payload = request.body.read
     result = service.try_create(payload)
 
-    content_type :json
-    status       result.status
-    body         result.body.to_json
+    respond result
   end
 
   def delete_task(task_class)
@@ -35,9 +41,7 @@ helpers do
     id = params[:id].to_i
     result = service.try_delete(id)
 
-    content_type :json
-    status       result.status
-    body         result.body.to_json
+    respond result
   end
 
   def update_task(task_class)
@@ -46,21 +50,13 @@ helpers do
     payload = request.body.read
     result  = service.try_update(id, payload)
 
-    content_type :json
-    status       result.status
-    body         result.body.to_json
+    respond result
   end
 end
 
 get '/tasks' do
-  uniq_tasks = UniqueTaskService.new.get_tasks
-  rec_tasks  = RecurringTaskService.new.get_tasks
-
-  content_type :json
-  {
-    "uniqueTasks"    => uniq_tasks,
-    "recurringTasks" => rec_tasks
-  }.to_json
+  response = TaskService.new.task_list_response
+  respond response
 end
 
 post '/recurring-task' do
@@ -87,7 +83,7 @@ put '/unique-task/:id' do
   update_task(UniqueTask)
 end
 
-post '/start-new-sprint' do
-  flash[:errors], flash[:notice] = SprintService.new.start_new_sprint
-  redirect to('/')
+post '/start_new_sprint' do
+  response = SprintService.new.start_new_sprint
+  respond response
 end

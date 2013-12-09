@@ -34,17 +34,18 @@ describe SprintService do
     end
 
     it 'returns a notification message and no error' do
-      err, msg = SprintService.new.start_new_sprint
-      err.must_be :empty?
-      msg.must_equal SprintService::SPRINT_CREATED_MSG
+      response = SprintService.new.start_new_sprint
+      response.status.must_equal 201
+      response.body["success_message"].must_equal SprintService::SPRINT_CREATED_MSG
     end
   end
 
   describe 'when the last sprint is not overdue' do
     it 'returns an error message' do
       Sprint.create(year: @current_year, week: @current_week)
-      err, msg = SprintService.new.start_new_sprint
-      err.must_equal [SprintService::SPRINT_NOT_FINISHED_MSG]
+      response = SprintService.new.start_new_sprint
+      response.status.must_equal 400
+      response.body["error_message"].must_equal SprintService::SPRINT_NOT_FINISHED_MSG
     end
   end
 end
