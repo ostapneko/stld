@@ -35,12 +35,12 @@ h3 {
   color: inherit;
 }
 
-#edit-btn {
+#uq-edit, #edit-recurring-btn {
   background-color: #913B53;
   border: none;
 }
 
-#edit-btn:hover {
+#uq-edit:hover, #edit-recurring-btn:hover {
   background-color: #753043;
 }
 

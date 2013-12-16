@@ -3,7 +3,11 @@ require 'sinatra/content_for'
 require 'rack-flash'
 require 'json'
 
+require 'ostruct'
+
 $LOAD_PATH << File.dirname(__FILE__)
+
+require 'config/connection'
 
 require 'models/recurring_task'
 require 'models/unique_task'
@@ -86,4 +90,11 @@ end
 post '/start_new_sprint' do
   response = SprintService.new.start_new_sprint
   respond response
+end
+
+if ENV['RACK_ENV'] == 'test'
+  delete '/truncate_db' do
+    [:recurring_tasks, :unique_tasks, :sprints].each { |db| DB[db].delete }
+    redirect to('/index.html')
+  end
 end
