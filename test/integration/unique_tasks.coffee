@@ -74,6 +74,3 @@ casper.test.begin('Unique tasks', 7, (test) ->
 
   casper.run ->
     test.done())
-
-
-# TODO create existing task should display error message, crud for recurring task, start new sprint

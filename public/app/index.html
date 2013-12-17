@@ -87,7 +87,7 @@
         <div class="panel-heading task-heading"><h3>Recurring tasks <a href="#" ng-click="toggleDisplay('recurring')"><i class="btn-expand fa" ng-class="tasksDisplayed | expandClass:'recurring'"></i></a></h3></div>
         <table class="table tasks table-hover" ng-show="tasksDisplayed.recurring">
           <tbody>
-            <tr ng-repeat="task in recurringTasks | filter: filterTask()">
+            <tr class="recurring-task" ng-repeat="task in recurringTasks | filter: filterTask()">
               <td ng-show="task.mode == 'show'">{{ task.description }}</td>
               <td ng-show="task.mode == 'edit'">
                 <form role="form" ng-submit="updateDescription()">
@@ -103,7 +103,7 @@
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-success" id="yellow"><i class="fa fa-check"></i> Done</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-default">{{ task.displayAction() }}</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" id="edit-recurring-btn" class="btn btn-info" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-danger" id="rec-delete"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -111,16 +111,16 @@
 
       <!-- CREATE RECURRING TASK-->
 
-      <button class="btn btn-default btn-recurring" ng-click="toggleCreateMode('recurring')" ng-show="!createMode['recurring']"><i class="fa fa-plus"></i> Create</button>
-      <form role="form" ng-show="createMode['recurring']" ng-submit="createRecurringTask(newTaskDescription, newTaskEnabled, newTaskFrequency)">
+      <button class="btn btn-default btn-recurring" ng-click="toggleCreateMode('recurring')" ng-show="!createMode['recurring']" id="rec-create"><i class="fa fa-plus"></i> Create</button>
+      <form role="form" ng-show="createMode['recurring']" ng-submit="createRecurringTask(newTaskDescription, newTaskEnabled, newTaskFrequency)" id="rec-create-form">
         <div class="input-group">
-          <input type="text" class="form-control" ng-model="newTaskDescription">
+          <input type="text" class="form-control" ng-model="newTaskDescription" name="rec-description">
           <span class="input-group-addon">
-            <input type="checkbox" ng-model="newTaskEnabled"> Enable?</input>
+            <input type="checkbox" ng-model="newTaskEnabled" name="rec-enabled"> Enable?</input>
           </span>
           <span class="input-group-addon">
             Repeat every
-            <select ng-model="newTaskFrequency">
+            <select ng-model="newTaskFrequency" name="rec-frequency">
               <option>1</option>
               <option>2</option>
               <option>3</option>

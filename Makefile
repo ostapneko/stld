@@ -61,5 +61,6 @@ scripts:
 test:
 	bundle exec script/test.rb
 e2e:
-	coffee -c test/integration/e2e.coffee
-	casperjs test test/integration/e2e.js
+	coffee -c test/integration/*.coffee
+	casperjs test test/integration/unique_tasks.js
+	casperjs test test/integration/recurring_tasks.js
