@@ -21,7 +21,7 @@ class UniqueTask extends Task
         @mode            = 'show'
 
 class RecurringTask extends Task
-    constructor: (@id, @description, @active, @enabled, @mode, @tempDescription) ->
+    constructor: (@id, @description, @active, @enabled, @frequency, @mode, @tempDescription) ->
 
     displayAction: ->
       if @enabled then "Disable" else "Enable"
@@ -45,6 +45,7 @@ taskServiceModule
                         t.description,
                         t.active,
                         t.enabled,
+                        t.frequency,
                         'show',
                         t.description
                     )) for t in body["recurringTasks"]
@@ -72,7 +73,7 @@ taskServiceModule
                     .success( (body, status, headers, config) ->
                         task = body.task
                         newTask = new RecurringTask(
-                            task.id, task.description, task.active, task.enabled, 'show', task.description)
+                            task.id, task.description, task.active, task.enabled, task.frequency, 'show', task.description)
                         createRecurringMode = false
                         recurringTasks.push(newTask)
                     )

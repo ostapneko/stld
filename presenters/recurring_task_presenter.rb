@@ -4,6 +4,7 @@ class RecurringTaskPresenter
     @description = task.description
     @active      = task.enabled && task.status == "todo"
     @enabled     = task.enabled
+    @frequency   = task.frequency
   end
 
   def serialize
@@ -11,7 +12,8 @@ class RecurringTaskPresenter
       id:          @id,
       description: @description,
       active:      @active,
-      enabled:     @enabled
+      enabled:     @enabled,
+      frequency:   @frequency
     }
   end
 end

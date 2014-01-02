@@ -11,6 +11,10 @@ h3 {
   font-weight: 600;
 }
 
+small {
+  font-style: italic;
+}
+
 .navbar-default .navbar-nav > li > a{
   color: silver;
 }

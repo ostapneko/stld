@@ -88,11 +88,14 @@
         <table class="table tasks table-hover" ng-show="tasksDisplayed.recurring">
           <tbody>
             <tr class="recurring-task" ng-repeat="task in recurringTasks | filter: filterTask()">
-              <td ng-show="task.mode == 'show'">{{ task.description }}</td>
+              <td ng-show="task.mode == 'show'">
+                {{ task.description }}</br>
+                <small>every {{task.frequency}} week(s)</small>
+              </td>
               <td ng-show="task.mode == 'edit'">
-                <form role="form" ng-submit="updateDescription()">
+                <form id="rec-edit-form" role="form" ng-submit="updateDescription()">
                   <div class="input-group">
-                    <input type="text" class="form-control" ng-model="task.tempDescription">
+                    <input name="rec-description" type="text" class="form-control" ng-model="task.tempDescription">
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-default">OK</button>
                       <button type="button" class="btn btn-default" ng-click="task.cancelEdit()">Cancel</button>
@@ -126,6 +129,7 @@
               <option>3</option>
               <option>4</option>
               <option>5</option>
+              <option>6</option>
             </select>
             week(s)
           </span>
