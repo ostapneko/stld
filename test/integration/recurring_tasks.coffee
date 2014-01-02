@@ -21,9 +21,8 @@ casper.test.begin('Recurring tasks', 2, (test) ->
     -> test.fail("Could not find the task after creation"),
     100)
 
-  # DISABLE TASK
-  # ENABLE TASK
-  # EDIT TASK
+
+  # TODO EDIT TASK
   #casper.then ->
   #  this.click('button#rec-edit')
   #  this.fillSelectors('form#rec-edit-form',
@@ -44,19 +43,9 @@ casper.test.begin('Recurring tasks', 2, (test) ->
     '.recurring-task',
     -> test.assertTextDoesntExist('recurring task 1', 'recurring task successfully removed'))
 
-  # CREATE RECURRING TASK WITHOUT ENABLING
-  # CREATE RECURRING TASK WITHOUT FREQUENCY -> SHOULD FAIL
-  casper.then ->
-    this.click('button#rec-create')
-    this.fillSelectors('form#rec-create-form', {
-      'input[name="rec-description"]': 'recurring task 3',
-    }, true)
+  # TODO CREATE RECURRING TASK WITHOUT ENABLING
+  # TODO DISABLE TASK
+  # TODO ENABLE TASK
 
-  casper.waitForSelector(
-    '.alert-danger',
-    -> test.assertTextExists('frequency is not in range or set', 'recurring task cannot be created without frequency'),
-    -> test.fail("Could not find error message"),
-    100)
-  # CREATE EXISTING TASK -> SHOULD FAIL
   casper.run ->
     test.done())

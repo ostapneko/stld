@@ -26,6 +26,9 @@ class RecurringTask extends Task
     displayAction: ->
       if @enabled then "Disable" else "Enable"
 
+class Alert
+    constructor: (@message) ->
+
 taskServiceModule
     .factory('taskService', ['$http', ($http) ->
         service = {}
@@ -55,7 +58,7 @@ taskServiceModule
                 )
 
         service.createUniqueTask =
-            (payload, uniqueTasks) ->
+            (payload, uniqueTasks, alerts) ->
                 $http.post("/unique-task", payload)
                     .success( (body, status, headers, config) ->
                         task = body.task
@@ -64,21 +67,22 @@ taskServiceModule
                         uniqueTasks.push(newTask)
                     )
                     .error( (body, status, headers, config) ->
-                        console.log(body, status, headers, config)
+                        alert = new Alert(body['error_message'])
+                        alerts.push(alert)
                     )
 
         service.createRecurringTask =
-            (payload, recurringTasks) ->
+            (payload, recurringTasks, alerts) ->
                 $http.post("/recurring-task", payload)
                     .success( (body, status, headers, config) ->
                         task = body.task
                         newTask = new RecurringTask(
                             task.id, task.description, task.active, task.enabled, task.frequency, 'show', task.description)
-                        createRecurringMode = false
                         recurringTasks.push(newTask)
                     )
                     .error( (body, status, headers, config) ->
-                        console.log(body, status, headers, config)
+                        alert = new Alert(body['error_message'])
+                        alerts.push(alert)
                     )
 
         service.askForUpdate = (task, payload, onSuccess, onFailure) ->

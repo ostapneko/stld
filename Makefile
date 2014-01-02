@@ -64,3 +64,4 @@ e2e:
 	coffee -c test/integration/*.coffee
 	casperjs test test/integration/unique_tasks.js
 	casperjs test test/integration/recurring_tasks.js
+	casperjs test test/integration/failing_scenarios.js

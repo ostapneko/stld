@@ -34,6 +34,13 @@
       </form>
     </section>
 
+    <section>
+      <div ng-repeat="alert in alerts" class="alert alert-danger">
+        <button type="button" id="close-alert" class="close" aria-hidden="true" ng-click="removeAlert(alert)">&times;</button>
+        {{alert.message}}
+      </div>
+    </section>
+
 <!--UNIQUE TASKS ------------------------------------------------ -->
 
     <section id="unique-tasks">
@@ -105,7 +112,7 @@
               </td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-success" id="yellow"><i class="fa fa-check"></i> Done</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-default">{{ task.displayAction() }}</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" id="edit-recurring-btn" class="btn btn-info" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" id="rec-edit" class="btn btn-info" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-danger" id="rec-delete"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
           </tbody>

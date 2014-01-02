@@ -5,6 +5,7 @@ stldAppModule
 
         $scope.uniqueTasks         = []
         $scope.recurringTasks      = []
+        $scope.alerts              = []
         $scope.tasksDisplayed      = { unique: true, recurring: true }
         $scope.taskFilter          = "thisWeek"
         $scope.createMode          = { unique: false, recurring: false }
@@ -22,7 +23,7 @@ stldAppModule
                 description: description
                 active: $scope.setStatus($scope.taskFilter)
 
-            taskService.createUniqueTask(payload, $scope.uniqueTasks)
+            taskService.createUniqueTask(payload, $scope.uniqueTasks, $scope.alerts)
                 .success( ->
                     $scope.toggleCreateMode('unique')
                     $scope.newTaskDescription = ""
@@ -35,7 +36,7 @@ stldAppModule
                 frequency: frequency
                 enabled: enabled
 
-            taskService.createRecurringTask(payload,  $scope.recurringTasks)
+            taskService.createRecurringTask(payload,  $scope.recurringTasks, $scope.alerts)
                 .success( ->
                     $scope.toggleCreateMode('recurring')
                     $scope.newTaskDescription = ""
@@ -90,6 +91,10 @@ stldAppModule
 
         $scope.toggleCreateMode = (taskType) ->
             $scope.createMode[taskType] = !$scope.createMode[taskType]
+
+        $scope.removeAlert = (alert) ->
+            newAlerts = $scope.alerts.filter (a) -> a isnt alert
+            $scope.alerts = newAlerts
 
         $scope.getTasks()
     ])
