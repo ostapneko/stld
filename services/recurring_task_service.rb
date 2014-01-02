@@ -37,4 +37,21 @@ class RecurringTaskService < TaskService
       started_at_year: current_year
     })
   end
+
+  def try_update(task_id, payload)
+    with_task(task_id) do |task|
+      with_params(payload) do |params|
+        task.set(
+          description: params["description"],
+          frequency:   params["frequency"].to_i
+        )
+
+        if task.valid?
+          update(task)
+        else
+          TaskPresenter.fail_task_invalid(task)
+        end
+      end
+    end
+  end
 end

@@ -1,7 +1,7 @@
 require 'sequel'
 require 'yaml'
 
-puts "WARNING: The RACK_ENV environment variable is not set. Assuming that the app is run in development mode." unless ENV['RACK_ENV']
+$stderr.puts "WARNING: The RACK_ENV environment variable is not set. Assuming that the app is run in development mode." unless ENV['RACK_ENV']
 
 env = ENV['RACK_ENV'] || "development"
 

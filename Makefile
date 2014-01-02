@@ -57,6 +57,9 @@ $(SCRIPTS_VENDOR_DIR):
 scripts:
 	coffee -c $(SCRIPTS_DIR)
 
-.PHONY: test
-test:
+.PHONY: rbtest, e2e
+rbtest:
 	bundle exec script/test.rb
+e2e:
+	coffee -c test/integration/*.coffee
+	casperjs test test/integration/*.js

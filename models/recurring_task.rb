@@ -12,6 +12,7 @@ class RecurringTask < Sequel::Model
     validates_presence [:description, :frequency, :enabled, :status, :started_at_week, :started_at_year]
     validates_unique [:description]
     validates_includes %w(todo done skip), :status
+    validates_includes (1..6), :frequency
   end
 
   def due_this_week?

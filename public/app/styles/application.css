@@ -11,6 +11,10 @@ h3 {
   font-weight: 600;
 }
 
+small {
+  font-style: italic;
+}
+
 .navbar-default .navbar-nav > li > a{
   color: silver;
 }
@@ -35,12 +39,12 @@ h3 {
   color: inherit;
 }
 
-#edit-btn {
+#uq-edit, #rec-edit {
   background-color: #913B53;
   border: none;
 }
 
-#edit-btn:hover {
+#uq-edit:hover, #rec-edit:hover {
   background-color: #753043;
 }
 

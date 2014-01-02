@@ -34,6 +34,15 @@
       </form>
     </section>
 
+<!--ALERTS -->
+
+    <section>
+      <div ng-repeat="alert in alerts" class="alert alert-danger">
+        <button type="button" class="close close-alert" aria-hidden="true" ng-click="removeAlert(alert)">&times;</button>
+        {{alert.message}}
+      </div>
+    </section>
+
 <!--UNIQUE TASKS ------------------------------------------------ -->
 
     <section id="unique-tasks">
@@ -43,12 +52,12 @@
         </div>
         <table class="table tasks table-hover" ng-show="tasksDisplayed.unique">
           <tbody>
-            <tr ng-repeat="task in uniqueTasks | filter: filterTask()">
+            <tr class="unique-task" ng-repeat="task in uniqueTasks | filter: filterTask()">
               <td ng-show="task.mode == 'show'">{{ task.description }}</td>
               <td ng-show="task.mode == 'edit'">
-                <form role="form" ng-submit="updateUniqueTaskDescription(task)">
+                <form id="uq-edit-form" role="form" ng-submit="updateUniqueTaskDescription(task)">
                   <div class="input-group">
-                    <input type="text" class="form-control" name="description" ng-model="task.tempDescription">
+                    <input type="text" class="form-control" name="uq-description" ng-model="task.tempDescription">
                     <span class="input-group-btn">
                       <button type="submit" class="btn btn-default">OK</button>
                       <button type="button" class="btn btn-default" ng-click="task.cancelEdit()">Cancel</button>
@@ -56,9 +65,9 @@
                   </div>
                 </form>
               </td>
-              <td class="task-btn"><button type="button" class="btn btn-success" ng-click="deleteUniqueTask(task)" ng-show="task.mode == 'show'"><i class="fa fa-check"></i> Done</button></td>
+              <td class="task-btn"><button type="button" class="btn btn-success" ng-click="deleteUniqueTask(task)" ng-show="task.mode == 'show'" id="uq-done"><i class="fa fa-check"></i> Done</button></td>
               <td class="task-btn"><button type="button" class="btn btn-default" ng-show="task.mode == 'show'" ng-click="toggleActivity(task)">{{ task.displayAction() }}</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-info" id="edit-btn" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-info" id="uq-edit" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
               <td class="task-btn"><button type="button" class="btn btn-danger" ng-show="task.mode == 'show'" ng-click="deleteUniqueTask(task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
             <tr>
@@ -69,14 +78,13 @@
 
       <!-- CREATE UNIQUE TASK-->
 
-      <button class="btn btn-default" ng-click="toggleCreateMode('unique')" ng-show="!createMode['unique']"><i class="fa fa-plus"></i> Create</button>
-      <form role="form" ng-show="createMode['unique']" ng-submit="createUniqueTask(newTaskDescription)">
+      <button class="btn btn-default" id='uq-create' ng-click="toggleCreateMode('unique')" ng-show="!createMode['unique']"><i class="fa fa-plus"></i> Create</button>
+      <form role="form" id="uq-create-form" ng-show="createMode['unique']" ng-submit="createUniqueTask(newTaskDescription)">
         <div class="input-group">
-          <input type="text" class="form-control" ng-model="newTaskDescription">
+          <input name='uq-description' type="text" class="form-control" ng-model="newTaskDescription">
           <span class="input-group-btn">
              <button type="submit" class="btn btn-default">OK</button>
-             <button type="button" class="btn btn-default" ng-click="toggleCreateMode('unique')">Cancel</button>
-          </span>
+             <button type="button" class="btn btn-default" ng-click="toggleCreateMode('unique')">Cancel</button> </span>
         </div>
       </form>
     </section>
@@ -88,14 +96,24 @@
         <div class="panel-heading task-heading"><h3>Recurring tasks <a href="#" ng-click="toggleDisplay('recurring')"><i class="btn-expand fa" ng-class="tasksDisplayed | expandClass:'recurring'"></i></a></h3></div>
         <table class="table tasks table-hover" ng-show="tasksDisplayed.recurring">
           <tbody>
-            <tr ng-repeat="task in recurringTasks | filter: filterTask()">
-              <td ng-show="task.mode == 'show'">{{ task.description }}</td>
+            <tr class="recurring-task" ng-repeat="task in recurringTasks | filter: filterTask()">
+              <td ng-show="task.mode == 'show'">
+                {{ task.description }}</br>
+                <small>every {{task.frequency}} week(s)</small>
+              </td>
               <td ng-show="task.mode == 'edit'">
-                <form role="form" ng-submit="updateDescription()">
+                <form id="rec-edit-form" role="form" ng-submit="updateRecTask(task)">
                   <div class="input-group">
-                    <input type="text" class="form-control" ng-model="task.tempDescription">
+                    <input name="rec-description" type="text" class="form-control" ng-model="task.tempDescription">
+                    <span class="input-group-addon">
+                      Repeat every
+                      <select ng-model="task.tempFrequency" name="rec-frequency">
+                        <option ng-repeat="opt in [1,2,3,4,5,6]">{{ opt }}</option>
+                      </select>
+                      week(s)
+                    </span>
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default">OK</button>
+                      <button type="submit" class="btn btn-default">OK</button>
                       <button type="button" class="btn btn-default" ng-click="task.cancelEdit()">Cancel</button>
                     </span>
                   </div>
@@ -103,8 +121,8 @@
               </td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-success" id="yellow"><i class="fa fa-check"></i> Done</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-default">{{ task.displayAction() }}</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" id="edit-btn" class="btn btn-info" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" id="rec-edit" class="btn btn-info" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-danger" id="rec-delete"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -112,21 +130,17 @@
 
       <!-- CREATE RECURRING TASK-->
 
-      <button class="btn btn-default btn-recurring" ng-click="toggleCreateMode('recurring')" ng-show="!createMode['recurring']"><i class="fa fa-plus"></i> Create</button>
-      <form role="form" ng-show="createMode['recurring']" ng-submit="createRecurringTask(newTaskDescription, newTaskEnabled, newTaskFrequency)">
+      <button class="btn btn-default btn-recurring" ng-click="toggleCreateMode('recurring')" ng-show="!createMode['recurring']" id="rec-create"><i class="fa fa-plus"></i> Create</button>
+      <form role="form" ng-show="createMode['recurring']" ng-submit="createRecurringTask(newTaskDescription, newTaskEnabled, newTaskFrequency)" id="rec-create-form">
         <div class="input-group">
-          <input type="text" class="form-control" ng-model="newTaskDescription">
+          <input type="text" class="form-control" ng-model="newTaskDescription" name="rec-description">
           <span class="input-group-addon">
-            <input type="checkbox" ng-model="newTaskEnabled"> Enable?</input>
+            <input type="checkbox" ng-model="newTaskEnabled" name="rec-enabled"> Enable?</input>
           </span>
           <span class="input-group-addon">
             Repeat every
-            <select ng-model="newTaskFrequency">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
+            <select ng-model="newTaskFrequency" name="rec-frequency">
+              <option ng-repeat="opt in [1,2,3,4,5,6]">{{ opt }}</option>
             </select>
             week(s)
           </span>

@@ -21,10 +21,21 @@ class UniqueTask extends Task
         @mode            = 'show'
 
 class RecurringTask extends Task
-    constructor: (@id, @description, @active, @enabled, @mode, @tempDescription) ->
+    constructor: (@id, @description, @active, @enabled, @frequency, @mode, @tempDescription, @tempFrequency) ->
 
     displayAction: ->
-      if @enabled then "Disable" else "Enable"
+        if @enabled then "Disable" else "Enable"
+
+    update: (params) ->
+        @description     = params.description
+        @active          = params.active
+        @frequency       = params.frequency
+        @mode            = 'show'
+        @tempDescription = params.description
+        @tempFrequency   = params.frequency
+
+class Alert
+    constructor: (@message) ->
 
 taskServiceModule
     .factory('taskService', ['$http', ($http) ->
@@ -45,6 +56,7 @@ taskServiceModule
                         t.description,
                         t.active,
                         t.enabled,
+                        t.frequency,
                         'show',
                         t.description
                     )) for t in body["recurringTasks"]
@@ -54,7 +66,7 @@ taskServiceModule
                 )
 
         service.createUniqueTask =
-            (payload, uniqueTasks) ->
+            (payload, uniqueTasks, alerts) ->
                 $http.post("/unique-task", payload)
                     .success( (body, status, headers, config) ->
                         task = body.task
@@ -63,27 +75,31 @@ taskServiceModule
                         uniqueTasks.push(newTask)
                     )
                     .error( (body, status, headers, config) ->
-                        console.log(body, status, headers, config)
+                        alert = new Alert(body['error_message'])
+                        alerts.push(alert)
                     )
 
         service.createRecurringTask =
-            (payload, recurringTasks) ->
+            (payload, recurringTasks, alerts) ->
                 $http.post("/recurring-task", payload)
                     .success( (body, status, headers, config) ->
                         task = body.task
                         newTask = new RecurringTask(
-                            task.id, task.description, task.active, task.enabled, 'show', task.description)
-                        createRecurringMode = false
+                            task.id, task.description, task.active, task.enabled, task.frequency, 'show', task.description)
                         recurringTasks.push(newTask)
                     )
                     .error( (body, status, headers, config) ->
-                        console.log(body, status, headers, config)
+                        alert = new Alert(body['error_message'])
+                        alerts.push(alert)
                     )
 
-        service.askForUpdate = (task, payload, onSuccess, onFailure) ->
-            $http.put("/unique-task/#{task.id}", payload)
-                .success(onSuccess)
-                .error(onFailure)
+        service.askForUpdate = (type, task, payload, alerts) ->
+            $http.put("/#{type}-task/#{task.id}", payload)
+                .success( (body, status, headers, config) -> task.update(payload) )
+                .error( (body, status, headers, config) ->
+                    alert = new Alert(body['error_message'])
+                    alerts.push(alert)
+                )
 
         service.askForDelete = (type, task, onSuccess, onFailure) ->
             $http.delete("/#{type}-task/#{task.id}")
