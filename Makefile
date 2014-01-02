@@ -58,7 +58,7 @@ scripts:
 	coffee -c $(SCRIPTS_DIR)
 
 .PHONY: test, e2e
-test:
+rbtest:
 	bundle exec script/test.rb
 e2e:
 	coffee -c test/integration/*.coffee

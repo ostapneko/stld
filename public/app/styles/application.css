@@ -44,7 +44,7 @@ small {
   border: none;
 }
 
-#uq-edit:hover, #edit-recurring-btn:hover {
+#uq-edit:hover, #rec-edit:hover {
   background-color: #753043;
 }
 

@@ -21,10 +21,18 @@ class UniqueTask extends Task
         @mode            = 'show'
 
 class RecurringTask extends Task
-    constructor: (@id, @description, @active, @enabled, @frequency, @mode, @tempDescription) ->
+    constructor: (@id, @description, @active, @enabled, @frequency, @mode, @tempDescription, @tempFrequency) ->
 
     displayAction: ->
-      if @enabled then "Disable" else "Enable"
+        if @enabled then "Disable" else "Enable"
+
+    update: (params) ->
+        @description     = params.description
+        @active          = params.active
+        @frequency       = params.frequency
+        @mode            = 'show'
+        @tempDescription = params.description
+        @tempFrequency   = params.frequency
 
 class Alert
     constructor: (@message) ->
@@ -85,8 +93,8 @@ taskServiceModule
                         alerts.push(alert)
                     )
 
-        service.askForUpdate = (task, payload, alerts) ->
-            $http.put("/unique-task/#{task.id}", payload)
+        service.askForUpdate = (type, task, payload, alerts) ->
+            $http.put("/#{type}-task/#{task.id}", payload)
                 .success( (body, status, headers, config) -> task.update(payload) )
                 .error( (body, status, headers, config) ->
                     alert = new Alert(body['error_message'])

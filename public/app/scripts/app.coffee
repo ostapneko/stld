@@ -52,18 +52,27 @@ stldAppModule
                 id: task.id
                 description: task.tempDescription
                 active: task.active
-            taskService.askForUpdate(task, payload, $scope.alerts)
+            taskService.askForUpdate("unique", task, payload, $scope.alerts)
+
+        $scope.updateRecTask = (task) ->
+            payload =
+                id: task.id
+                description: task.tempDescription
+                active: task.active
+                frequency: task.tempFrequency
+            taskService.askForUpdate("recurring", task, payload, $scope.alerts)
 
         $scope.toggleActivity = (task) ->
             payload =
                 id: task.id
                 description: task.description
                 active: !task.active
-            taskService.askForUpdate(task, payload, $scope.alerts)
+            taskService.askForUpdate("unique", task, payload, $scope.alerts)
 
         $scope.deleteUniqueTask    = (task) -> $scope.deleteTask("unique", task)
         $scope.deleteRecurringTask = (task) -> $scope.deleteTask("recurring", task)
 
+        #TODO simplify
         $scope.deleteTask = (type, task) ->
             onSuccess = (body, status, headers, config) ->
                 tasks = if type == "unique" then $scope.uniqueTasks else $scope.recurringTasks
