@@ -108,12 +108,7 @@
                     <span class="input-group-addon">
                       Repeat every
                       <select ng-model="task.tempFrequency" name="rec-frequency">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
+                        <option ng-repeat="opt in [1,2,3,4,5,6]">{{ opt }}</option>
                       </select>
                       week(s)
                     </span>
@@ -145,12 +140,7 @@
           <span class="input-group-addon">
             Repeat every
             <select ng-model="newTaskFrequency" name="rec-frequency">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
+              <option ng-repeat="opt in [1,2,3,4,5,6]">{{ opt }}</option>
             </select>
             week(s)
           </span>
