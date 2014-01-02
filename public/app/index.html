@@ -34,9 +34,11 @@
       </form>
     </section>
 
+<!--ALERTS -->
+
     <section>
       <div ng-repeat="alert in alerts" class="alert alert-danger">
-        <button type="button" id="close-alert" class="close" aria-hidden="true" ng-click="removeAlert(alert)">&times;</button>
+        <button type="button" class="close close-alert" aria-hidden="true" ng-click="removeAlert(alert)">&times;</button>
         {{alert.message}}
       </div>
     </section>

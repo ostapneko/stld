@@ -85,10 +85,13 @@ taskServiceModule
                         alerts.push(alert)
                     )
 
-        service.askForUpdate = (task, payload, onSuccess, onFailure) ->
+        service.askForUpdate = (task, payload, alerts) ->
             $http.put("/unique-task/#{task.id}", payload)
-                .success(onSuccess)
-                .error(onFailure)
+                .success( (body, status, headers, config) -> task.update(payload) )
+                .error( (body, status, headers, config) ->
+                    alert = new Alert(body['error_message'])
+                    alerts.push(alert)
+                )
 
         service.askForDelete = (type, task, onSuccess, onFailure) ->
             $http.delete("/#{type}-task/#{task.id}")

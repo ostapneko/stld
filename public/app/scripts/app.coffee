@@ -36,7 +36,7 @@ stldAppModule
                 frequency: frequency
                 enabled: enabled
 
-            taskService.createRecurringTask(payload,  $scope.recurringTasks, $scope.alerts)
+            taskService.createRecurringTask(payload, $scope.recurringTasks, $scope.alerts)
                 .success( ->
                     $scope.toggleCreateMode('recurring')
                     $scope.newTaskDescription = ""
@@ -52,20 +52,14 @@ stldAppModule
                 id: task.id
                 description: task.tempDescription
                 active: task.active
-            $scope.try_update(task, payload)
+            taskService.askForUpdate(task, payload, $scope.alerts)
 
         $scope.toggleActivity = (task) ->
             payload =
                 id: task.id
                 description: task.description
                 active: !task.active
-            $scope.try_update(task, payload)
-
-        $scope.try_update = (task, payload) ->
-            onSuccess = (body, status, headers, config) -> task.update(payload)
-            onFailure = (body, status, headers, config) -> console.log(body, status)
-
-            taskService.askForUpdate(task, payload, onSuccess, onFailure)
+            taskService.askForUpdate(task, payload, $scope.alerts)
 
         $scope.deleteUniqueTask    = (task) -> $scope.deleteTask("unique", task)
         $scope.deleteRecurringTask = (task) -> $scope.deleteTask("recurring", task)
