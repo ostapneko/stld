@@ -56,7 +56,7 @@
             <tr class="unique-task" ng-repeat="task in uniqueTasks | filter: filterTask()">
               <td ng-show="task.mode == 'show'">{{ task.description }}</td>
               <td ng-show="task.mode == 'edit'">
-                <form id="uq-edit-form" role="form" ng-submit="updateUniqueTaskDescription(task)">
+                <form id="uq-edit-form" role="form" ng-submit="updateTask('unique', task)">
                   <div class="input-group">
                     <input type="text" class="form-control" name="uq-description" ng-model="task.tempDescription">
                     <span class="input-group-btn">
@@ -66,10 +66,10 @@
                   </div>
                 </form>
               </td>
-              <td class="task-btn"><button type="button" class="btn btn-success" ng-click="deleteUniqueTask(task)" ng-show="task.mode == 'show'" id="uq-done"><i class="fa fa-check"></i> Done</button></td>
+              <td class="task-btn"><button type="button" class="btn btn-success" ng-click="deleteTask('unique', task)" ng-show="task.mode == 'show'" id="uq-done"><i class="fa fa-check"></i> Done</button></td>
               <td class="task-btn"><button type="button" class="btn btn-default" ng-show="task.mode == 'show'" ng-click="toggleActivity(task)">{{ task.displayAction() }}</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-info" id="uq-edit" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
-              <td class="task-btn"><button type="button" class="btn btn-danger" ng-show="task.mode == 'show'" ng-click="deleteUniqueTask(task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
+              <td class="task-btn"><button type="button" class="btn btn-danger" ng-show="task.mode == 'show'" ng-click="deleteTask('unique', task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
             <tr>
             </tr>
@@ -103,7 +103,7 @@
                 <small>every {{task.frequency}} week(s)</small>
               </td>
               <td ng-show="task.mode == 'edit'">
-                <form id="rec-edit-form" role="form" ng-submit="updateRecTask(task)">
+                <form id="rec-edit-form" role="form" ng-submit="updateTask('recurring', task)">
                   <div class="input-group">
                     <input name="rec-description" type="text" class="form-control" ng-model="task.tempDescription">
                     <span class="input-group-addon">
@@ -120,10 +120,10 @@
                   </div>
                 </form>
               </td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-success" id="yellow"><i class="fa fa-check"></i> Done</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteTask('recurring', task)" class="btn btn-success" id="yellow"><i class="fa fa-check"></i> Done</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-default">{{ task.displayAction() }}</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" id="rec-edit" class="btn btn-info" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteRecurringTask(task)" class="btn btn-danger" id="rec-delete"><i class="fa fa-times"></i> Delete</button></td>
+              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteTask('recurring', task)" class="btn btn-danger" id="rec-delete"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
           </tbody>
         </table>
