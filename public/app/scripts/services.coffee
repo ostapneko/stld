@@ -1,4 +1,4 @@
-taskServiceModule = angular.module('taskServiceModule', [])
+#stldServices = angular.module('stldServices', [])
 
 class Task
     cancelEdit: ->
@@ -36,8 +36,7 @@ class RecurringTask extends Task
 
 class Alert
     constructor: (@message) ->
-
-taskServiceModule
+angular.module('stldApp.services', [])
     .factory('taskService', ['$http', ($http) ->
         service = {}
 
