@@ -72,6 +72,7 @@ angular.module('stldApp.services', [])
         )
         .error( (body, status, headers, config) ->
           alert = new Alert(body['error_message'])
+          alerts.length = 0
           alerts.push(alert)
         )
 
@@ -80,6 +81,7 @@ angular.module('stldApp.services', [])
         .success( (body, status, headers, config) -> task.update(payload) )
         .error( (body, status, headers, config) ->
           alert = new Alert(body['error_message'])
+          alerts.length = 0
           alerts.push(alert)
         )
 

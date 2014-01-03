@@ -38,7 +38,7 @@
 <!--ALERTS -->
 
     <section>
-      <div ng-repeat="alert in alerts" class="alert alert-danger">
+      <div ng-repeat="alert in alerts" class="alert alert-danger alert-dismissable">
         <button type="button" class="close close-alert" aria-hidden="true" ng-click="removeAlert(alert)">&times;</button>
         {{alert.message}}
       </div>

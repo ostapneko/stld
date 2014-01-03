@@ -77,3 +77,12 @@ table.tasks.table > tbody > tr > td {
 div.panel-heading.task-heading {
   background-color: white;
 }
+
+.alert {
+  position: fixed;
+  top: 55px;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  text-align: center;
+}
