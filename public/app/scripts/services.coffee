@@ -53,7 +53,9 @@ angular.module('stldApp.services', [])
             t.active,
             t.frequency,
             'show',
-            t.status
+            t.status,
+            t.description,
+            t.frequency
           )) for t in body["recurringTasks"]
         )
         .error( (body, status, headers, config) ->
@@ -105,6 +107,6 @@ angular.module('stldApp.services', [])
       else
         new RecurringTask( task.id, task.description,
                            task.active, task.frequency,
-                           'show', task.status )
+                           'show', task.status, task.description, task.frequency )
     service
   ])

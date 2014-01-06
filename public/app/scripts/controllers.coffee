@@ -11,8 +11,6 @@ angular.module('stldApp.controllers', [])
     $scope.newTaskFrequency    = ""
 
     $scope.getTasks = ->
-      $scope.uniqueTasks         = []
-      $scope.recurringTasks      = []
       taskService.getAllTasks($scope.uniqueTasks, $scope.recurringTasks)
 
     $scope.startNewSprint = ->
