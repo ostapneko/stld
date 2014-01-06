@@ -28,7 +28,7 @@ class RecurringTask extends Task
     @tempDescription = params.description
     @tempFrequency   = params.frequency
     @status          = params.status
-    @active          = @status == "todo"
+    @active          = params.active || @status == "todo"
 
 class Alert
   constructor: (@message) ->

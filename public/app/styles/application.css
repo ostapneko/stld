@@ -39,12 +39,12 @@ small {
   color: inherit;
 }
 
-#uq-edit, #rec-edit {
+.uq-edit, .rec-edit {
   background-color: #913B53;
   border: none;
 }
 
-#uq-edit:hover, #rec-edit:hover {
+.uq-edit:hover, .rec-edit:hover {
   background-color: #753043;
 }
 
