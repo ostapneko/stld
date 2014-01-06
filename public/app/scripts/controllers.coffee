@@ -8,13 +8,15 @@ angular.module('stldApp.controllers', [])
     $scope.taskFilter          = "thisWeek"
     $scope.createMode          = { unique: false, recurring: false }
     $scope.newTaskDescription  = ""
-    $scope.newTaskEnabled      = true
     $scope.newTaskFrequency    = ""
 
     $scope.getTasks = ->
       $scope.uniqueTasks         = []
       $scope.recurringTasks      = []
       taskService.getAllTasks($scope.uniqueTasks, $scope.recurringTasks)
+
+    $scope.startNewSprint = ->
+      taskService.askForNewSprint($scope.alerts)
 
     $scope.createUniqueTask = (description) ->
       payload =
@@ -27,18 +29,17 @@ angular.module('stldApp.controllers', [])
           $scope.newTaskDescription = ""
         )
 
-    $scope.createRecurringTask = (description, enabled, frequency) ->
+    $scope.createRecurringTask = (description, frequency) ->
       payload =
         description: description
         active: $scope.setStatus($scope.taskFilter)
         frequency: frequency
-        enabled: enabled
+        enabled: true
 
       taskService.askForCreate('recurring', payload, $scope.recurringTasks, $scope.alerts)
         .success( ->
           $scope.toggleCreateMode('recurring')
           $scope.newTaskDescription = ""
-          $scope.newTaskEnabled     = true
           $scope.newTaskFrequency   = ""
         )
 
@@ -47,8 +48,16 @@ angular.module('stldApp.controllers', [])
         id: task.id
         description: task.tempDescription
         active: task.active
-        frequency: task.tempFrequency if type == 'recurring'
+        frequency: task.tempFrequency if type == "recurring"
       taskService.askForUpdate(type, task, payload, $scope.alerts)
+
+    $scope.setAsDone = (task) ->
+      payload =
+        id: task.id
+        description: task.description
+        frequency: task.frequency
+        status: "done"
+      taskService.askForUpdate("recurring", task, payload, $scope.alerts)
 
     $scope.deleteTask = (type, task) ->
       tasks = if type == "unique" then $scope.uniqueTasks else $scope.recurringTasks
@@ -80,6 +89,10 @@ angular.module('stldApp.controllers', [])
     $scope.removeAlert = (alert) ->
       newAlerts = $scope.alerts.filter (a) -> a isnt alert
       $scope.alerts = newAlerts
+
+    $scope.sunday = ->
+      d = new Date()
+      d.getDay() == 6
 
     $scope.getTasks()
 ])

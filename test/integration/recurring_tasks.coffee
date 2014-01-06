@@ -43,9 +43,5 @@ casper.test.begin('Recurring tasks', 2, (test) ->
     '.recurring-task',
     -> test.assertTextDoesntExist('recurring task 1', 'recurring task successfully removed'))
 
-  # TODO CREATE RECURRING TASK WITHOUT ENABLING
-  # TODO DISABLE TASK
-  # TODO ENABLE TASK
-
   casper.run ->
     test.done())

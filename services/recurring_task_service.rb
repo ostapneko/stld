@@ -43,7 +43,8 @@ class RecurringTaskService < TaskService
       with_params(payload) do |params|
         task.set(
           description: params["description"],
-          frequency:   params["frequency"].to_i
+          frequency:   params["frequency"] && params["frequency"].to_i,
+          status: params["status"] || task.status
         )
 
         if task.valid?

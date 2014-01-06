@@ -19,18 +19,16 @@ class UniqueTask extends Task
     @mode            = 'show'
 
 class RecurringTask extends Task
-  constructor: (@id, @description, @active, @enabled, @frequency, @mode, @tempDescription, @tempFrequency) ->
-
-  displayAction: ->
-    if @enabled then "Disable" else "Enable"
+  constructor: (@id, @description, @active, @frequency, @mode, @status, @tempDescription, @tempFrequency) ->
 
   update: (params) ->
     @description     = params.description
-    @active          = params.active
     @frequency       = params.frequency
-    @mode            = 'show'
+    @mode            = "show"
     @tempDescription = params.description
     @tempFrequency   = params.frequency
+    @status          = params.status
+    @active          = @status == "todo"
 
 class Alert
   constructor: (@message) ->
@@ -53,10 +51,9 @@ angular.module('stldApp.services', [])
             t.id,
             t.description,
             t.active,
-            t.enabled,
             t.frequency,
             'show',
-            t.description
+            t.status
           )) for t in body["recurringTasks"]
         )
         .error( (body, status, headers, config) ->
@@ -93,13 +90,21 @@ angular.module('stldApp.services', [])
         )
         .error( (body, status, headers, config) -> console.log(body, status) )
 
+    service.askForNewSprint = (alerts) ->
+      $http.post("/start-new-sprint")
+        .success( (body, status, headers, config) -> service.getAllTasks([], []))
+        .error( (body, status, headers, config) ->
+          alert = new Alert(body['error_message'])
+          alerts.length = 0
+          alerts.push(alert)
+        )
     service.createTask = (type, task) ->
       if type == 'unique'
         new UniqueTask( task.id, task.description,
                         task.active, 'show', task.description )
       else
         new RecurringTask( task.id, task.description,
-                           task.active, task.enabled,
-                           task.frequency, 'show', task.description )
+                           task.active, task.frequency,
+                           'show', task.status )
     service
   ])

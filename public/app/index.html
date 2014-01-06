@@ -30,9 +30,7 @@
 <!--START NEW SPRINT --------------------- -->
 
     <section>
-      <form action="/start_new_sprint", method="post">
-        <button class="btn btn-default btn-lg" id="start-sprint-btn">Start new sprint <i class="fa fa-angle-double-right"></i></button>
-      </form>
+      <button class="btn btn-default btn-lg" id="start-sprint-btn" ng-click="startNewSprint()" ng-show="sunday">Start new sprint <i class="fa fa-angle-double-right"></i></button>
     </section>
 
 <!--ALERTS -->
@@ -66,8 +64,8 @@
                   </div>
                 </form>
               </td>
-              <td class="task-btn"><button type="button" class="btn btn-success" ng-click="deleteTask('unique', task)" ng-show="task.mode == 'show'" id="uq-done"><i class="fa fa-check"></i> Done</button></td>
               <td class="task-btn"><button type="button" class="btn btn-default" ng-show="task.mode == 'show'" ng-click="toggleActivity(task)">{{ task.displayAction() }}</button></td>
+              <td class="task-btn"><button type="button" class="btn btn-success" ng-click="deleteTask('unique', task)" ng-show="task.mode == 'show'" id="uq-done"><i class="fa fa-check"></i> Done</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-info" id="uq-edit" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
               <td class="task-btn"><button type="button" class="btn btn-danger" ng-show="task.mode == 'show'" ng-click="deleteTask('unique', task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
@@ -120,9 +118,8 @@
                   </div>
                 </form>
               </td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteTask('recurring', task)" class="btn btn-success" id="yellow"><i class="fa fa-check"></i> Done</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-default">{{ task.displayAction() }}</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" id="rec-edit" class="btn btn-info" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
+              <td class="task-btn"><button type="button" class="btn btn-success" id="yellow" ng-show="task.mode == 'show'" ng-click="setAsDone(task)" ng-disabled="!task.active"><i class="fa fa-check"></i> Done</button></td>
+              <td class="task-btn"><button type="button" id="rec-edit" class="btn btn-info" ng-show="task.mode == 'show'" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
               <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteTask('recurring', task)" class="btn btn-danger" id="rec-delete"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
           </tbody>
@@ -132,12 +129,9 @@
       <!-- CREATE RECURRING TASK-->
 
       <button class="btn btn-default btn-recurring" ng-click="toggleCreateMode('recurring')" ng-show="!createMode['recurring']" id="rec-create"><i class="fa fa-plus"></i> Create</button>
-      <form role="form" ng-show="createMode['recurring']" ng-submit="createRecurringTask(newTaskDescription, newTaskEnabled, newTaskFrequency)" id="rec-create-form">
+      <form role="form" ng-show="createMode['recurring']" ng-submit="createRecurringTask(newTaskDescription, newTaskFrequency)" id="rec-create-form">
         <div class="input-group">
           <input type="text" class="form-control" ng-model="newTaskDescription" name="rec-description">
-          <span class="input-group-addon">
-            <input type="checkbox" ng-model="newTaskEnabled" name="rec-enabled"> Enable?</input>
-          </span>
           <span class="input-group-addon">
             Repeat every
             <select ng-model="newTaskFrequency" name="rec-frequency">
