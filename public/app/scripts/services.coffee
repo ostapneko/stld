@@ -30,83 +30,70 @@ class RecurringTask extends Task
     @status          = params.status
     @active          = params.active || @status == "todo"
 
-class Alert
-  constructor: (@message) ->
-
 angular.module('stldApp.services', [])
-  .factory('taskService', ['$http', ($http) ->
+  .factory('taskService', ['$http', '$q', ($http, $q) ->
     service = {}
 
-    service.getAllTasks = (uniqueTasks, recurringTasks) ->
+    service.getTasks = ->
       $http.get('/tasks')
-        .success( (body, status, headers, config) ->
-          uniqueTasks.push(new UniqueTask(
-            t.id,
-            t.description,
-            t.active,
-            'show',
-            t.description
-          )) for t in body["uniqueTasks"]
-          recurringTasks.push(new RecurringTask(
-            t.id,
-            t.description,
-            t.active,
-            t.frequency,
-            'show',
-            t.status,
-            t.description,
-            t.frequency
-          )) for t in body["recurringTasks"]
-        )
-        .error( (body, status, headers, config) ->
-          console.log(body, status)
+        .then(
+          (response) ->
+            uniqueTasks =
+              (new UniqueTask(t.id, t.description, t.active,
+                              'show', t.description) for t in response.data.uniqueTasks)
+            recurringTasks =
+              (new RecurringTask( t.id, t.description, t.active,
+                                  t.frequency, 'show', t.status,
+                                  t.description, t.frequency) for t in response.data.recurringTasks)
+
+            { unique: uniqueTasks, recurring: recurringTasks }
+          ,
+          (response) -> $q.reject(response.data.error_message)
         )
 
-    service.askForCreate = (type, payload, tasks, alerts) ->
-      $http.post("/#{type}-task", payload)
-        .success( (body, status, headers, config) ->
-          task = body.task
-          newTask = service.createTask(type, task)
-          tasks.push(newTask)
-        )
-        .error( (body, status, headers, config) ->
-          alert = new Alert(body['error_message'])
-          alerts.length = 0
-          alerts.push(alert)
+    service.createUnique = (payload) ->
+      $http.post("/unique-task", payload)
+        .then(
+          (response) ->
+            t = response.data.task
+            new UniqueTask( t.id, t.description, t.active,
+                            'show', t.description )
+          ,
+          (response) -> $q.reject(response.data.error_message)
         )
 
-    service.askForUpdate = (type, task, payload, alerts) ->
+    service.createRecurring = (payload) ->
+      $http.post("/recurring-task", payload)
+        .then(
+          (response) ->
+            t = response.data.task
+            new RecurringTask( t.id, t.description, t.active,
+                               t.frequency, 'show', t.status,
+                               t.description, t.frequency )
+          ,
+          (response) -> $q.reject(response.data.error_message)
+        )
+
+    service.update = (type, task, payload) ->
       $http.put("/#{type}-task/#{task.id}", payload)
-        .success( (body, status, headers, config) -> task.update(payload) )
-        .error( (body, status, headers, config) ->
-          alert = new Alert(body['error_message'])
-          alerts.length = 0
-          alerts.push(alert)
+        .then(
+          (response) -> task.update(payload),
+          (response) -> $q.reject(response.data.error_message)
         )
 
-    service.askForDelete = (type, task, tasks) ->
+    service.delete = (type, task) ->
       $http.delete("/#{type}-task/#{task.id}")
-        .success( (body, status, headers, config) ->
-          i = tasks.indexOf(task)
-          tasks.splice(i, 1)
+        .then(
+          (response) -> task,
+          (response) -> $q.reject(response.data.error_message)
         )
-        .error( (body, status, headers, config) -> console.log(body, status) )
 
-    service.askForNewSprint = (alerts) ->
+    service.startNewSprint = ->
       $http.post("/start-new-sprint")
-        .success( (body, status, headers, config) -> service.getAllTasks([], []))
-        .error( (body, status, headers, config) ->
-          alert = new Alert(body['error_message'])
-          alerts.length = 0
-          alerts.push(alert)
+        .then(
+          (response) -> service.getTasks,
+          (response) -> $q.reject(response.data.error_message)
         )
-    service.createTask = (type, task) ->
-      if type == 'unique'
-        new UniqueTask( task.id, task.description,
-                        task.active, 'show', task.description )
-      else
-        new RecurringTask( task.id, task.description,
-                           task.active, task.frequency,
-                           'show', task.status, task.description, task.frequency )
+
     service
   ])

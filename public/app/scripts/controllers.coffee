@@ -1,9 +1,6 @@
 angular.module('stldApp.controllers', [])
   .controller('TaskCtrl', ['$scope', '$http', 'taskService', ($scope, $http, taskService) ->
-
-    $scope.uniqueTasks         = []
-    $scope.recurringTasks      = []
-    $scope.alerts              = []
+    $scope.alert               = ""
     $scope.tasksDisplayed      = { unique: true, recurring: true }
     $scope.taskFilter          = "thisWeek"
     $scope.createMode          = { unique: false, recurring: false }
@@ -11,20 +8,32 @@ angular.module('stldApp.controllers', [])
     $scope.newTaskFrequency    = ""
 
     $scope.getTasks = ->
-      taskService.getAllTasks($scope.uniqueTasks, $scope.recurringTasks)
+      taskService.getTasks()
+        .then(
+          (tasks) ->
+            $scope.uniqueTasks = tasks.unique
+            $scope.recurringTasks = tasks.recurring
+          ,
+          (error) -> $scope.alert = error
+        )
 
     $scope.startNewSprint = ->
-      taskService.askForNewSprint($scope.alerts)
+      taskService.startNewSprint()
+        .catch( (error) -> $scope.alert = error )
 
     $scope.createUniqueTask = (description) ->
       payload =
         description: description
         active: $scope.setStatus($scope.taskFilter)
 
-      taskService.askForCreate('unique', payload, $scope.uniqueTasks, $scope.alerts)
-        .success( ->
-          $scope.toggleCreateMode('unique')
-          $scope.newTaskDescription = ""
+      taskService.createUnique(payload)
+        .then(
+          (task) ->
+            $scope.uniqueTasks.push(task)
+            $scope.toggleCreateMode('unique')
+            $scope.newTaskDescription = ""
+          ,
+          (error) -> $scope.alert = error
         )
 
     $scope.createRecurringTask = (description, frequency) ->
@@ -34,11 +43,15 @@ angular.module('stldApp.controllers', [])
         frequency: frequency
         enabled: true
 
-      taskService.askForCreate('recurring', payload, $scope.recurringTasks, $scope.alerts)
-        .success( ->
-          $scope.toggleCreateMode('recurring')
-          $scope.newTaskDescription = ""
-          $scope.newTaskFrequency   = ""
+      taskService.createRecurring(payload)
+        .then(
+          (task) ->
+            $scope.recurringTasks.push(task)
+            $scope.toggleCreateMode('recurring')
+            $scope.newTaskDescription = ""
+            $scope.newTaskFrequency   = ""
+          ,
+          (error) -> $scope.alert = error
         )
 
     $scope.updateTask = (type, task) ->
@@ -47,7 +60,9 @@ angular.module('stldApp.controllers', [])
         description: task.tempDescription
         active: task.active
         frequency: task.tempFrequency if type == "recurring"
-      taskService.askForUpdate(type, task, payload, $scope.alerts)
+
+      taskService.update(type, task, payload)
+        .catch( (error) -> $scope.alert = error )
 
     $scope.setAsDone = (task) ->
       payload =
@@ -55,11 +70,20 @@ angular.module('stldApp.controllers', [])
         description: task.description
         frequency: task.frequency
         status: "done"
-      taskService.askForUpdate("recurring", task, payload, $scope.alerts)
+
+      taskService.update("recurring", task, payload)
+        .catch( (error) -> $scope.alert = error )
 
     $scope.deleteTask = (type, task) ->
-      tasks = if type == "unique" then $scope.uniqueTasks else $scope.recurringTasks
-      taskService.askForDelete(type, task, tasks)
+      taskService.delete(type, task)
+        .then(
+          (task) ->
+            tasks = if type == "unique" then $scope.uniqueTasks else $scope.recurringTasks
+            i = tasks.indexOf(task)
+            tasks.splice(i, 1)
+          ,
+          (error) -> $scope.alert = error
+        )
 
     $scope.setStatus = (filter) ->
       filter == "thisWeek"
@@ -69,7 +93,9 @@ angular.module('stldApp.controllers', [])
         id: task.id
         description: task.description
         active: !task.active
-      taskService.askForUpdate("unique", task, payload, $scope.alerts)
+
+      taskService.update("unique", task, payload)
+        .catch( (error) -> $scope.alert = error )
 
     $scope.setFilter = (f) ->
       $scope.tasksDisplayed = { unique: true, recurring: true }
@@ -84,9 +110,11 @@ angular.module('stldApp.controllers', [])
     $scope.toggleCreateMode = (taskType) ->
       $scope.createMode[taskType] = !$scope.createMode[taskType]
 
-    $scope.removeAlert = (alert) ->
-      newAlerts = $scope.alerts.filter (a) -> a isnt alert
-      $scope.alerts = newAlerts
+    $scope.alertPresent = ->
+      $scope.alert.length > 0
+
+    $scope.removeAlert = ->
+      $scope.alert = ""
 
     $scope.sunday = ->
       d = new Date()
