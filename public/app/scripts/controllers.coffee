@@ -24,7 +24,7 @@ angular.module('stldApp.controllers', [])
     $scope.createUniqueTask = (description) ->
       payload =
         description: description
-        active: $scope.setStatus($scope.taskFilter)
+        active: $scope.isThisWeekDisplayed()
 
       taskService.createUnique(payload)
         .then(
@@ -39,7 +39,7 @@ angular.module('stldApp.controllers', [])
     $scope.createRecurringTask = (description, frequency) ->
       payload =
         description: description
-        active: $scope.setStatus($scope.taskFilter)
+        active: $scope.isThisWeekDisplayed()
         frequency: frequency
         enabled: true
 
@@ -85,8 +85,8 @@ angular.module('stldApp.controllers', [])
           (error) -> $scope.alert = error
         )
 
-    $scope.setStatus = (filter) ->
-      filter == "thisWeek"
+    $scope.isThisWeekDisplayed = ->
+      $scope.taskFilter == "thisWeek"
 
     $scope.toggleActivity = (task) ->
       payload =
@@ -102,7 +102,7 @@ angular.module('stldApp.controllers', [])
       $scope.taskFilter = f
 
     $scope.filterTask = ->
-      { active: $scope.taskFilter == "thisWeek" }
+      { active: $scope.isThisWeekDisplayed() }
 
     $scope.toggleDisplay = (prop) ->
       $scope.tasksDisplayed[prop] = !$scope.tasksDisplayed[prop]
