@@ -12,7 +12,11 @@ describe SprintService do
   describe 'when the last sprint is overdue' do
     before do
       # Create an overdue sprint
-      Sprint.create(year: @current_year, week: (@current_week - 1))
+      if @current_week == 1
+        Sprint.create(year: @current_year - 1, week: 52)
+      else
+        Sprint.create(year: @current_year, week: (@current_week - 1))
+      end
       # Task long overdue
       @task1 = RecurringTask.create(description: 'description', enabled: true, status: 'todo', started_at_week: (@current_week - 3), started_at_year: @current_year, frequency: 2)
       # Task due this week

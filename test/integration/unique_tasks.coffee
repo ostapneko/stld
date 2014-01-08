@@ -9,8 +9,8 @@ casper.test.begin('Unique tasks', 7, (test) ->
   # CREATE UNIQUE TASK IN CURRENT SPRINT
 
   casper.then ->
-    this.click('button#uq-create')
-    this.fillSelectors('form#uq-create-form',
+    this.click('button.uq-create')
+    this.fillSelectors('form.uq-create-form',
       {'input[name="uq-description"]': 'unique task 1'}, true)
 
   casper.waitForSelector(
@@ -21,8 +21,8 @@ casper.test.begin('Unique tasks', 7, (test) ->
 
   # EDIT UNIQUE TASK
   casper.then ->
-    this.click('button#uq-edit')
-    this.fillSelectors('form#uq-edit-form',
+    this.click('button.uq-edit')
+    this.fillSelectors('form.uq-edit-form',
       {'input[name="uq-description"]': 'unique task 2'}, true)
 
   casper.waitForSelector(
@@ -66,7 +66,7 @@ casper.test.begin('Unique tasks', 7, (test) ->
   # REMOVE UNIQUE TASK
 
   casper.then ->
-    this.click('button#uq-done')
+    this.click('button.uq-done')
 
   casper.waitWhileSelector(
     '.unique-task',

@@ -3,6 +3,7 @@ class RecurringTaskPresenter
     @id          = task.id
     @description = task.description
     @active      = task.enabled && task.status == "todo"
+    @status      = task.status
     @enabled     = task.enabled
     @frequency   = task.frequency
   end
@@ -12,6 +13,7 @@ class RecurringTaskPresenter
       id:          @id,
       description: @description,
       active:      @active,
+      status:      @status,
       enabled:     @enabled,
       frequency:   @frequency
     }

@@ -3,21 +3,21 @@ casper.test.setUp (done) ->
     casper.open("http://test-stld/truncate_db", { method: 'delete' })
   .run(done)
 
-casper.test.begin('Failing scenarios', 6, (test) ->
+casper.test.begin('Invalid scenarios', 6, (test) ->
   casper.start("http://test-stld")
 
   # CREATE EXISTING RECURRING TASK
 
   casper.then ->
-    this.click('button#rec-create')
-    this.fillSelectors('form#rec-create-form', {
+    this.click('button.rec-create')
+    this.fillSelectors('form.rec-create-form', {
       'input[name="rec-description"]': 'recurring task 1',
       'select[name="rec-frequency"]': 1
     }, true)
 
   casper.then ->
-    this.click('button#rec-create')
-    this.fillSelectors('form#rec-create-form', {
+    this.click('button.rec-create')
+    this.fillSelectors('form.rec-create-form', {
       'input[name="rec-description"]': 'recurring task 1',
       'select[name="rec-frequency"]': 1
     }, true)
@@ -32,8 +32,8 @@ casper.test.begin('Failing scenarios', 6, (test) ->
 
   casper.then ->
     this.click('button.close-alert')
-    this.click('button#uq-create')
-    this.fillSelectors('form#uq-create-form',
+    this.click('button.uq-create')
+    this.fillSelectors('form.uq-create-form',
       {'input[name="uq-description"]': ''}, true)
 
   casper.waitForSelector(
@@ -46,10 +46,9 @@ casper.test.begin('Failing scenarios', 6, (test) ->
 
   casper.then ->
     this.click('button.close-alert')
-    this.click('button#rec-create')
-    this.fillSelectors('form#rec-create-form', {
-      'input[name="rec-description"]': 'recurring task 3',
-    }, true)
+    this.click('button.rec-create')
+    this.fillSelectors('form.rec-create-form',
+      {'input[name="rec-description"]': 'recurring task 3'}, true)
 
   casper.waitForSelector(
     '.alert-danger',
@@ -60,8 +59,8 @@ casper.test.begin('Failing scenarios', 6, (test) ->
   # EDIT UNIQUE TASK WITH BLANK DESCRIPTION
   casper.then ->
     this.click('button.close-alert')
-    this.click('button#uq-create')
-    this.fillSelectors('form#uq-create-form',
+    this.click('button.uq-create')
+    this.fillSelectors('form.uq-create-form',
       {'input[name="uq-description"]': 'unique task 1'}, true)
 
   casper.waitForSelector(
@@ -71,13 +70,13 @@ casper.test.begin('Failing scenarios', 6, (test) ->
     100)
 
   casper.then ->
-    this.click('button#uq-edit')
-    this.fillSelectors('form#uq-edit-form',
+    this.click('button.uq-edit')
+    this.fillSelectors('form.uq-edit-form',
       {'input[name="uq-description"]': ''}, true)
 
   casper.waitForSelector(
     '.alert-danger',
-    -> test.assertTextExists('description is not present', 'task cannot be edited with empty description'),
+    -> test.assertTextExists('description is not present', 'unique task cannot be edited with empty description'),
     -> test.fail("Could not find error message"),
     100)
 
@@ -85,14 +84,14 @@ casper.test.begin('Failing scenarios', 6, (test) ->
 
   casper.then ->
     this.click('button.close-alert')
-    this.click('button#rec-edit')
-    this.fillSelectors('form#rec-edit-form', {
+    this.click('button.rec-edit')
+    this.fillSelectors('form.rec-edit-form', {
       'input[name="rec-description"]': '',
     }, true)
 
   casper.waitForSelector(
     '.alert-danger',
-    -> test.assertTextExists('description is not present', 'task cannot be edited with empty description'),
+    -> test.assertTextExists('description is not present', 'recurring task cannot be edited with empty description'),
     -> test.fail("Could not find error message"),
     100)
 
