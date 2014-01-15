@@ -116,9 +116,14 @@ angular.module('stldApp.controllers', [])
     $scope.removeAlert = ->
       $scope.alert = ""
 
-    $scope.sunday = ->
-      d = new Date()
-      d.getDay() == 6
+    $scope.sprintFinished = false
+
+    $scope.newSprintAllowed = ->
+      taskService.newSprintAllowed()
+        .success((data, status, headers, config) ->
+          $scope.sprintFinished = data.sprint_finished)
+
+    $scope.newSprintAllowed()
 
     $scope.getTasks()
 ])

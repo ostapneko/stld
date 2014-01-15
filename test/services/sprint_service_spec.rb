@@ -30,6 +30,10 @@ describe SprintService do
       Sprint.current.week.must_equal @current_week
     end
 
+    it 'informs that it is possible to create a new sprint' do
+      response = SprintService.new.new_sprint_allowed?
+      response.body["sprint_finished"].must_equal true
+    end
     it 'updates the recurring tasks' do
       SprintService.new.start_new_sprint
       RecurringTask.find(description: "description").status.must_equal 'todo'
@@ -50,6 +54,11 @@ describe SprintService do
       response = SprintService.new.start_new_sprint
       response.status.must_equal 400
       response.body["error_message"].must_equal SprintService::SPRINT_NOT_FINISHED_MSG
+    end
+
+    it 'informs that it is not possible to create a new sprint' do
+      response = SprintService.new.new_sprint_allowed?
+      response.body["sprint_finished"].must_equal false
     end
   end
 end

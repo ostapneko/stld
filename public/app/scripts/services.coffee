@@ -88,6 +88,9 @@ angular.module('stldApp.services', [])
           (response) -> $q.reject(response.data.error_message)
         )
 
+    service.newSprintAllowed = ->
+      $http.get("/new_sprint_allowed")
+
     service.startNewSprint = ->
       $http.post("/start-new-sprint")
         .then(
