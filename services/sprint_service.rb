@@ -20,6 +20,11 @@ class SprintService
     end
   end
 
+  def new_sprint_allowed?
+    body = { "sprint_finished" => !current_sprint_not_finished? }
+    Response.new(200, body)
+  end
+
   def create_new_sprint
     Sprint.new(year: current_year, week: current_week)
   end

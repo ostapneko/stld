@@ -87,6 +87,11 @@ put '/unique-task/:id' do
   update_task(UniqueTask)
 end
 
+get '/new_sprint_allowed' do
+  response = SprintService.new.new_sprint_allowed?
+  respond response
+end
+
 post '/start-new-sprint' do
   response = SprintService.new.start_new_sprint
   respond response
