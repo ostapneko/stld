@@ -16,13 +16,17 @@
     <header class="navbar-fixed-top navbar">
       <nav class="navbar navbar-default" role="navigation">
         <div class="container">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="/">STLD!</a>
+          <div class="row">
+            <div class="navbar-header col-md-1 col-sm-3 col-xs-2">
+              <a class="navbar-brand" href="/">STLD!</a>
+            </div>
+            <div class="col-md-11 col-sm-9 col-xs-10">
+              <ul class="nav navbar-nav">
+                <li ng-class="{active: taskFilter == 'thisWeek'}"><a href="#" ng-click="setFilter('thisWeek')">this week</a></li>
+                <li ng-class="{active: taskFilter == 'backlog'}"><a href="#" ng-click="setFilter('backlog')">backlog</a></li>
+              </ul>
+            </div>
           </div>
-            <ul class="nav navbar-nav">
-              <li ng-class="{active: taskFilter == 'thisWeek'}"><a href="#" ng-click="setFilter('thisWeek')">this week</a></li>
-              <li ng-class="{active: taskFilter == 'backlog'}"><a href="#" ng-click="setFilter('backlog')">backlog</a></li>
-            </ul>
         </div>
       </nav>
     </header>
@@ -64,10 +68,10 @@
                   </div>
                 </form>
               </td>
-              <td class="task-btn"><button type="button" class="btn btn-default" ng-show="task.mode == 'show'" ng-click="toggleActivity(task)">{{ task.displayAction() }}</button></td>
-              <td class="task-btn"><button type="button" class="btn btn-success uq-done" ng-click="deleteTask('unique', task)" ng-show="task.mode == 'show'"><i class="fa fa-check"></i> Done</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" class="btn btn-info uq-edit" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
-              <td class="task-btn"><button type="button" class="btn btn-danger" ng-show="task.mode == 'show'" ng-click="deleteTask('unique', task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
+              <td class="task-btn" ng-if="task.mode == 'show'"><button type="button" class="btn btn-default" ng-click="toggleActivity(task)">{{ task.displayAction() }}</button></td>
+              <td class="task-btn" ng-if="task.mode == 'show'"><button type="button" class="btn btn-success uq-done" ng-click="deleteTask('unique', task)"><i class="fa fa-check"></i> Done</button></td>
+              <td class="task-btn" ng-if="task.mode == 'show'"><button type="button" class="btn btn-info uq-edit" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
+              <td class="task-btn" ng-if="task.mode == 'show'"><button type="button" class="btn btn-danger" ng-click="deleteTask('unique', task)" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
             <tr>
             </tr>
@@ -118,9 +122,9 @@
                   </div>
                 </form>
               </td>
-              <td class="task-btn"><button type="button" class="btn btn-success rec-done" ng-show="task.mode == 'show'" ng-click="setAsDone(task)" ng-disabled="!task.active"><i class="fa fa-check"></i> Done</button></td>
-              <td class="task-btn"><button type="button" class="btn btn-info rec-edit" ng-show="task.mode == 'show'" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
-              <td class="task-btn"><button ng-show="task.mode == 'show'" type="button" ng-click="deleteTask('recurring', task)" class="btn btn-danger rec-delete"><i class="fa fa-times"></i> Delete</button></td>
+              <td class="task-btn" ng-if="task.mode == 'show'"><button type="button" class="btn btn-success rec-done" ng-click="setAsDone(task)" ng-disabled="!task.active"><i class="fa fa-check"></i> Done</button></td>
+              <td class="task-btn" ng-if="task.mode == 'show'"><button type="button" class="btn btn-info rec-edit" ng-click="task.addEditMode()"><i class="fa fa-pencil"></i> Edit</button></td>
+              <td class="task-btn" ng-if="task.mode == 'show'"><button type="button" ng-click="deleteTask('recurring', task)" class="btn btn-danger rec-delete"><i class="fa fa-times"></i> Delete</button></td>
             </tr>
           </tbody>
         </table>
