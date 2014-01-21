@@ -41,11 +41,12 @@ small {
 
 .uq-edit, .rec-edit {
   background-color: #913B53;
-  border: none;
+  border: 1px solid #913B53;
 }
 
 .uq-edit:hover, .rec-edit:hover {
   background-color: #753043;
+  border: 1px solid #913B53;
 }
 
 #start-sprint-btn {
@@ -53,23 +54,38 @@ small {
   display: block;
 }
 
-table.tasks.table > tbody > tr > td {
-  padding: 15px;
+#unique-tasks, #recurring-tasks {
+  margin-bottom: 100px;
 }
 
 .task-btn {
-  width: 115px;
+  width: 70px;
 }
 
-#unique-tasks, #recurring-tasks {
-  margin-bottom: 100px;
+.task {
+  padding: 15px 0 15px 0;
+  border-bottom: 1px solid rgb(221, 221, 221);
+  vertical-align: middle;
+}
+
+.task-description {
+  margin-top: 6px;
+}
+
+.task:last-child {
+  border: none;
+  padding-bottom: 0;
+}
+
+.task:first-child {
+  padding-top: 0;
 }
 
 .btn-expand {
   color: black;
 }
 
-.input-group-addon{
+.input-group-addon {
   padding: 0px 12px;
 }
 
