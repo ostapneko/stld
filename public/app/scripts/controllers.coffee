@@ -6,6 +6,7 @@ angular.module('stldApp.controllers', [])
     $scope.createMode          = { unique: false, recurring: false }
     $scope.newTaskDescription  = ""
     $scope.newTaskFrequency    = ""
+    $scope.inputFocus          = { createUq: false, editUq: false, createRec: false, editRec: false }
 
     $scope.getTasks = ->
       taskService.getTasks()
@@ -109,6 +110,9 @@ angular.module('stldApp.controllers', [])
 
     $scope.toggleCreateMode = (taskType) ->
       $scope.createMode[taskType] = !$scope.createMode[taskType]
+
+    $scope.toggleFocus = (type) ->
+      $scope.inputFocus[type] = !$scope.inputFocus[type]
 
     $scope.alertPresent = ->
       $scope.alert.length > 0
