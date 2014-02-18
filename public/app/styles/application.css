@@ -59,7 +59,9 @@ small {
 }
 
 .task-btn {
-  width: 70px;
+  font-size: 13px;
+  overflow: hidden;
+  min-width: 60px;
 }
 
 .task {

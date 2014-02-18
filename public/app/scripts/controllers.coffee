@@ -19,7 +19,13 @@ angular.module('stldApp.controllers', [])
 
     $scope.startNewSprint = ->
       taskService.startNewSprint()
-        .catch( (error) -> $scope.alert = error )
+        .then(
+          (response) ->
+            $scope.newSprintAllowed()
+            $scope.getTasks()
+          ,
+          (error) -> $scope.alert = error
+        )
 
     $scope.createUniqueTask = (description) ->
       payload =
