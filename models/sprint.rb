@@ -24,8 +24,12 @@ class Sprint < Sequel::Model
   end
 
   def overdue?
-    current_number = current_year.to_s + current_week.to_s
-    sprint_number = year.to_s + week.to_s
-    current_number > sprint_number
+    week_number_string(current_year, current_week) > week_number_string(year, week)
+  end
+
+  private
+
+  def week_number_string(year, week)
+    "#{year}%02i" % week
   end
 end
