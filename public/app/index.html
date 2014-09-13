@@ -3,7 +3,6 @@
 <html ng-app="stldApp">
   <head>
     <link href="/styles/vendor/bootstrap.no-icons.min.css" rel="stylesheet">
-    <link href="/styles/vendor/font-awesome/font-awesome.min.css" rel="stylesheet">
     <link href="/styles/application.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
@@ -34,7 +33,7 @@
     <!--START NEW SPRINT --------------------- -->
 
     <section>
-      <button class="btn btn-default btn-lg" id="start-sprint-btn" ng-click="startNewSprint()" ng-show="sprintFinished">Start new sprint <i class="fa fa-angle-double-right"></i></button>
+      <button class="btn btn-default btn-lg" id="start-sprint-btn" ng-click="startNewSprint()" ng-show="sprintFinished">Start new sprint</button>
     </section>
 
     <!--ALERTS -->
@@ -51,7 +50,7 @@
     <section id="unique-tasks">
       <div class="panel panel-default">
         <div class="panel-heading task-heading">
-          <h3>Unique tasks <a href="#" ng-click="toggleDisplay('unique')"><i class="btn-expand fa" ng-class="tasksDisplayed | expandClass:'unique'"></i></a></h3>
+          <h3>Unique tasks <a href="#" ng-click="toggleDisplay('unique')"><span class="btn-expand fa" ng-class="tasksDisplayed | expandClass:'unique'"></span></a></h3>
         </div>
         <div class="panel-body tasks" ng-show="tasksDisplayed.unique">
           <div class="row unique-task task" ng-repeat="task in uniqueTasks | filter: filterTask()">
