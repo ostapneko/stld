@@ -4,7 +4,7 @@ gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'rack-flash3'
 gem 'sequel'
-gem 'pg'
+gem 'jdbc-postgres'
 gem 'puma'
 
 group :development do
