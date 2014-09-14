@@ -104,3 +104,25 @@ div.panel-heading.task-heading {
   z-index: 2;
   text-align: center;
 }
+
+.expand-link {
+  display: inline-block;
+  margin-top: -10px;
+  vertical-align: middle;
+}
+
+.expand-link:hover, .expand-link:visited, .expand-link:active {
+  text-decoration: none;
+}
+
+.fa-caret-right:before {
+  content: "\25B6";
+  font-size: 13px;
+  margin-left: 2px;
+}
+
+.fa-caret-down:before {
+  content: "\25BC";
+  font-size: 16px;
+  margin-left: 1px;
+}
