@@ -1,3 +1,3 @@
-require './stld.rb'
+require 'stld'
 
 run Sinatra::Application
