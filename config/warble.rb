@@ -29,7 +29,7 @@ Warbler::Config.new do |config|
   ]
 
   # Additional files/directories to exclude
-  # config.excludes = FileList["lib/tasks/*"]
+  config.excludes = FileList["public"]
 
   # Additional Java .jar files to include.  Note that if .jar files are placed
   # in lib (and not otherwise excluded) then they need not be mentioned here.

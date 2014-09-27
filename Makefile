@@ -9,7 +9,6 @@ SCRIPTS_DIR           = $(APP_FOLDER)/scripts
 SCRIPTS_VENDOR_DIR    = $(SCRIPTS_DIR)/vendor
 ANGULAR               = $(SCRIPTS_VENDOR_DIR)/angular.min.js
 
-
 all: $(BOOTSTRAP_CSS) $(ANGULAR) scripts
 
 $(BOOTSTRAP_CSS): | $(STYLES_VENDOR_DIR)
@@ -29,7 +28,7 @@ scripts:
 
 .PHONY: rbtest, e2e
 rbtest:
-	bundle exec script/test.rb
+	bundle exec scripts/test.rb
 e2e:
 	coffee -c test/integration/*.coffee
 	casperjs test test/integration/*.js
