@@ -20,14 +20,15 @@ require 'services/recurring_task_service'
 require 'presenters/unique_task_presenter'
 require 'presenters/recurring_task_presenter'
 
+set :protection, except: [:http_origin]
+set :static, (%w(test development).include?(ENV['RACK_ENV']))
+set :public_folder, "public/app"
 
+set :protection, except: [:session_hijacking, :http_origin, :json_csrf, :remote_token, :form_token]
 enable :sessions
 use Rack::Flash
 include ERB::Util
 
-
-set :static, (%w(test development).include?(ENV['RACK_ENV']))
-set :public_folder, "public/app"
 
 helpers do
   def respond(result)
