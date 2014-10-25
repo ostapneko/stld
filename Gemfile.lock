@@ -3,18 +3,14 @@ GEM
   specs:
     backports (3.3.2)
     eventmachine (1.0.3)
-    eventmachine (1.0.3-java)
     ffi (1.9.0)
-    ffi (1.9.0-java)
-    jdbc-postgres (9.3.1102)
     listen (1.2.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
     minitest (4.3.2)
+    pg (0.15.1)
     puma (2.9.1)
-      rack (>= 1.1, < 2.0)
-    puma (2.9.1-java)
       rack (>= 1.1, < 2.0)
     rack (1.5.2)
     rack-flash3 (1.0.3)
@@ -45,12 +41,11 @@ GEM
     tilt (1.4.1)
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES
-  jdbc-postgres
   minitest
+  pg
   puma
   rack-flash3
   rerun
