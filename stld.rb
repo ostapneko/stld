@@ -25,10 +25,6 @@ enable :sessions
 use Rack::Flash
 include ERB::Util
 
-
-set :static, (%w(test development).include?(ENV['RACK_ENV']))
-set :public_folder, "public/app"
-
 helpers do
   def respond(result)
     content_type :json
