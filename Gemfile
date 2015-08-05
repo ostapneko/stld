@@ -5,7 +5,7 @@ gem 'sinatra-contrib'
 gem 'rack-flash3'
 gem 'sequel'
 gem 'pg'
-gem 'unicorn'
+gem 'thin'
 
 group :development do
   gem 'rerun'
