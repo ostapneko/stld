@@ -10,7 +10,7 @@ SCRIPTS_VENDOR_DIR    = $(SCRIPTS_DIR)/vendor
 ANGULAR               = $(SCRIPTS_VENDOR_DIR)/angular.min.js
 
 
-all: $(BOOTSTRAP_CSS) $(ANGULAR) scripts
+all: $(BOOTSTRAP_CSS) $(ANGULAR)
 
 $(BOOTSTRAP_CSS): | $(STYLES_VENDOR_DIR)
 	wget 'http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css' -O $(BOOTSTRAP_CSS)
@@ -24,14 +24,10 @@ $(ANGULAR): | $(SCRIPTS_VENDOR_DIR)
 $(SCRIPTS_VENDOR_DIR):
 	mkdir -p $(SCRIPTS_VENDOR_DIR)
 
-scripts:
-	coffee -c $(SCRIPTS_DIR)
-
 .PHONY: rbtest, e2e
 rbtest:
 	bundle exec script/test.rb
 e2e:
-	coffee -c test/integration/*.coffee
 	casperjs test test/integration/*.js
 
 migrate:

@@ -27,6 +27,8 @@ set :session_secret, ENV['SESSION_SECRET']
 use Rack::Flash
 include ERB::Util
 
+set :public_folder, Proc.new { File.join(root, 'public', 'app') }
+
 helpers do
   def respond(result)
     content_type :json
@@ -58,6 +60,10 @@ helpers do
 
     respond result
   end
+end
+
+get '/' do
+  File.read(File.join(File.dirname(__FILE__), 'public', 'app', 'index.html'))
 end
 
 get '/tasks' do
