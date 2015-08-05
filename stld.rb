@@ -22,6 +22,8 @@ require 'presenters/recurring_task_presenter'
 
 
 enable :sessions
+raise 'set the SESSION_SECRET env var' unless ENV['SESSION_SECRET']
+set :session_secret, ENV['SESSION_SECRET']
 use Rack::Flash
 include ERB::Util
 

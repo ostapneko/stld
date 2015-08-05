@@ -14,3 +14,5 @@ end
 group :test do
   gem 'minitest'
 end
+
+ruby '2.1.6'
