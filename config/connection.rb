@@ -5,6 +5,6 @@ $stderr.puts "WARNING: The RACK_ENV environment variable is not set. Assuming th
 
 env = ENV['RACK_ENV'] || "development"
 
-config = YAML.load(File.read("config/database.yml"))[env]
+connection_string = YAML.load(File.read("config/database.yml"))[env]
 
-DB = Sequel.connect("postgres://#{config['username']}:#{config['password']}@#{config['host']}:#{config['port']}/#{config['database']}")
+DB = Sequel.connect(connection_string)

@@ -33,3 +33,6 @@ rbtest:
 e2e:
 	coffee -c test/integration/*.coffee
 	casperjs test test/integration/*.js
+
+migrate:
+	./script/migrate
