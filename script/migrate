@@ -8,7 +8,7 @@ class Migrator
 
   def run
     env = ENV['RACK_ENV'] || "development"
-    connection_string = YAML.load(File.read("config/database.yml"))[env]
+    connection_string = ENV['DATABASE_URL'] || YAML.load(File.read("config/database.yml"))[env]
     options = "-m migrations"
     options << " -M 0" if @destroy
     `sequel #{options} #{connection_string}`
